@@ -1,0 +1,32 @@
+{
+  "name": "@staaky/tipped",
+  "title": "Tipped",
+  "version": "4.7.0",
+  "description": "A Complete Javascript Tooltip Solution",
+  "author": {
+    "name": "Nick Stakenburg",
+    "url": "http://www.nickstakenburg.com"
+  },
+  "main": "dist/js/tipped.js",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/staaky/tipped.git"
+  },
+  "license": "CC-BY-4.0",
+  "keywords": [
+    "tooltip",
+    "tooltips",
+    "responsive",
+    "jquery",
+    "jquery-plugin"
+  ],
+  "devDependencies": {
+    "grunt": "^1.0.4",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^4.0.1",
+    "grunt-contrib-watch": "^1.1.0",
+    "prettier": "1.18.2"
+  }
+}
