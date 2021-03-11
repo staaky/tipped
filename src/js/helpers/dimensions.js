@@ -3,7 +3,7 @@ var Dimensions = {
 
   // dimensions are returned as the 1st parameter of the callback
   get: function(url, options, callback) {
-    if ($.type(options) == "function") {
+    if ( typeof options === "function") {
       callback = options;
       options = {};
     }

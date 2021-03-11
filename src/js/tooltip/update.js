@@ -194,7 +194,7 @@ $.extend(Tooltip.prototype, {
               options[cb],
               $.proxy(function(proceed) {
                 var args = _slice.call(arguments, 1),
-                  jqXHR = $.type(args[0] === "object") ? args[0] : args[2]; // success callback has jqXHR as 3th arg, complete and error as 1st
+                  jqXHR = (typeof args[0] === "object") ? args[0] : args[2]; // success callback has jqXHR as 3th arg, complete and error as 1st
 
                 // don't store aborts
                 if (jqXHR.statusText && jqXHR.statusText === "abort") return;
@@ -236,7 +236,7 @@ $.extend(Tooltip.prototype, {
           $.each(
             entry.callbacks,
             $.proxy(function(cb, args) {
-              if ($.type(options[cb]) === "function") {
+              if (typeof options[cb] === "function") {
                 options[cb].apply(this, args);
               }
             }, this)
@@ -263,7 +263,7 @@ $.extend(Tooltip.prototype, {
     };
 
     if (
-      $.type(content) === "string" ||
+      typeof content === "string" ||
       _.isElement(content) ||
       _.isText(content) ||
       _.isDocumentFragment(content) ||
@@ -294,7 +294,7 @@ $.extend(Tooltip.prototype, {
     // append instantly
     this._content.html(this.content);
 
-    this._title.html(title && $.type(title) === "string" ? title : "");
+    this._title.html(title && typeof title === "string" ? title : "");
     this._titleWrapper[title ? "show" : "hide"]();
     this._close[
       (this.title || this.options.title) && close ? "show" : "hide"
@@ -437,7 +437,7 @@ $.extend(Tooltip.prototype, {
     this.is("updated", true);
     this.is("updating", false);
 
-    if ($.type(this.options.afterUpdate) === "function") {
+    if (typeof this.options.afterUpdate === "function") {
       // make sure visibility is visible during this
       var isHidden = this._contentWrapper.css("visibility");
       if (isHidden) this._contentWrapper.css({ visibility: "visible" });

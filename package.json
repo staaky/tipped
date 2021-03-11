@@ -1,7 +1,7 @@
 {
   "name": "@staaky/tipped",
   "title": "Tipped",
-  "version": "4.7.0",
+  "version": "4.7.1",
   "description": "A Complete Javascript Tooltip Solution",
   "author": {
     "name": "Nick Stakenburg",
@@ -9,8 +9,8 @@
   },
   "main": "dist/js/tipped.js",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/staaky/tipped.git"
+    "type": "git",
+    "url": "https://github.com/staaky/tipped.git"
   },
   "license": "CC-BY-4.0",
   "keywords": [

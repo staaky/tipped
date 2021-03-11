@@ -11,7 +11,7 @@ $.extend(Tooltip.prototype, {
 
     var options;
     if (
-      $.type(content) === "object" &&
+      typeof content === "object" &&
       !(
         _.isElement(content) ||
         _.isText(content) ||
@@ -93,7 +93,7 @@ $.extend(Tooltip.prototype, {
 
     this.content = content;
     this.title = $(this.element).data("tipped-title");
-    if ($.type(this.options.title) != "undefined")
+    if (typeof this.options.title !== "undefined")
       this.title = this.options.title;
 
     this.zIndex = this.options.zIndex || +Tooltips.options.startingZIndex;
@@ -149,7 +149,7 @@ $.extend(Tooltip.prototype, {
     }
 
     // function as content
-    if ($.type(this.content) === "function") {
+    if ( typeof this.content === "function") {
       this._fn = this.content;
     }
 
@@ -218,7 +218,7 @@ $.extend(Tooltip.prototype, {
   attach: function() {
     if (this.is("detached")) {
       var container;
-      if ($.type(this.options.container) === "string") {
+      if ( typeof this.options.container === "string") {
         var target = this.target;
         if (target === "mouse") {
           target = this.element;
@@ -340,9 +340,9 @@ $.extend(Tooltip.prototype, {
 
   createPostBuildObservers: function() {
     // x
-    this._tooltip.delegate(
-      ".tpd-close, .close-tooltip",
+    this._tooltip.on(
       "click",
+      ".tpd-close, .close-tooltip",
       $.proxy(function(event) {
         // this helps prevent the click on x to trigger a click on the body
         // which could conflict with some scripts

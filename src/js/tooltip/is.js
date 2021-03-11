@@ -1,7 +1,7 @@
 $.extend(Tooltip.prototype, {
   // states
   is: function(question, answer) {
-    if ($.type(answer) === "boolean") {
+    if (typeof answer === "boolean") {
       this._cache.is[question] = answer;
     }
 

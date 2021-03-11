@@ -42,7 +42,7 @@ $.extend(Tipped, {
   visible: function(selector) {
     if (_.isElement(selector)) {
       return Tooltips.isVisibleByElement(selector);
-    } else if ($.type(selector) !== "undefined") {
+    } else if ( typeof selector !== "undefined") {
       var elements = $(selector),
         visible = 0;
       $.each(elements, function(i, element) {

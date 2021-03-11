@@ -114,7 +114,7 @@ $.extend(Tooltip.prototype, {
     shq.queue(
       $.proxy(function(next_onshow) {
         // only fire it here if we've already updated
-        if (this.is("updated") && $.type(this.options.onShow) === "function") {
+        if (this.is("updated") && typeof this.options.onShow === "function") {
           //
           var visible = new Visible(this._tooltip);
           this.options.onShow(this._content[0], this.element); // todo: update
@@ -138,9 +138,9 @@ $.extend(Tooltip.prototype, {
 
   _show: function(duration, callback) {
     duration =
-      ($.type(duration) === "number" ? duration : this.options.fadeIn) || 0;
+      ( typeof duration === "number" ? duration : this.options.fadeIn) || 0;
     callback =
-      callback || ($.type(arguments[0]) == "function" ? arguments[0] : false);
+      callback || (typeof arguments[0] === "function" ? arguments[0] : false);
 
     // hide others
     if (this.options.hideOthers) {
@@ -212,7 +212,7 @@ $.extend(Tooltip.prototype, {
       }, this)
     );
 
-    if ($.type(this.options.afterHide) === "function" && this.is("updated")) {
+    if (typeof this.options.afterHide === "function" && this.is("updated")) {
       shq.queue(
         $.proxy(function(next_afterhide) {
           this.options.afterHide(this._content[0], this.element); // TODO: update
@@ -235,7 +235,7 @@ $.extend(Tooltip.prototype, {
     }
 
     // callback
-    if ($.type(callback) === "function") {
+    if (typeof callback === "function") {
       shq.queue(function(next_callback) {
         callback();
         next_callback();
@@ -253,7 +253,7 @@ $.extend(Tooltip.prototype, {
 
   _hide: function(instant, callback) {
     callback =
-      callback || ($.type(arguments[0]) === "function" ? arguments[0] : false);
+      callback || (typeof arguments[0] === "function" ? arguments[0] : false);
 
     this.attach();
 
