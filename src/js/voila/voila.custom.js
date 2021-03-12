@@ -13,12 +13,12 @@ var Voila = (function($) {
       return new Voila(elements, opts, cb);
     }
 
-    var argTypeOne = $.type(arguments[1]),
+    var argTypeOne = typeof arguments[1],
       options = argTypeOne === "object" ? arguments[1] : {},
       callback =
         argTypeOne === "function"
           ? arguments[1]
-          : $.type(arguments[2]) === "function"
+          : typeof arguments[2] === "function"
           ? arguments[2]
           : false;
 
@@ -47,7 +47,7 @@ var Voila = (function($) {
     _add: function(elements) {
       // normalize to an array
       var array =
-        $.type(elements) == "string"
+        typeof elements === "string"
           ? $(elements) // selector
           : elements instanceof jQuery || elements.length > 0
           ? elements // jQuery obj, Array
@@ -211,7 +211,7 @@ var Voila = (function($) {
             if (this._time >= this.options.intervals[this._ipos][0]) {
               // timeout when no next interval
               if (!this.options.intervals[this._ipos + 1]) {
-                if ($.type(this._timeout) == "function") {
+                if (typeof this._timeout === "function") {
                   this._timeout();
                 }
                 return;

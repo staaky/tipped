@@ -1036,7 +1036,7 @@ $.extend(Tooltip.prototype, {
       // handle a different container
       var container;
       if (this.options.container !== document.body) {
-        if ($.type(this.options.container) === "string") {
+        if ( typeof this.options.container === "string") {
           var target = this.target;
           if (target === "mouse") {
             target = this.element;

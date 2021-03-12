@@ -14,7 +14,7 @@ var Delegations = {
 
   add: function(selector, content, options) {
     var options;
-    if ($.type(content) === "object" && !_.isElement(content)) {
+    if ( typeof content === "object" && !_.isElement(content)) {
       options = content;
       content = null;
     } else {
@@ -48,16 +48,16 @@ var Delegations = {
     };
 
     this._delegations[uid].removeTitleHandler = $.proxy(this.removeTitle, this);
-    $(document).delegate(
-      selector + ":not(.tpd-delegation-uid-" + uid + ")",
+    $(document).on(
       "mouseenter",
+      selector + ":not(.tpd-delegation-uid-" + uid + ")",
       this._delegations[uid].removeTitleHandler
     );
 
     this._delegations[uid].handler = handler;
-    $(document).delegate(
-      selector + ":not(.tpd-delegation-uid-" + uid + ")",
+    $(document).on(
       ttOptions.showOn.element,
+      selector + ":not(.tpd-delegation-uid-" + uid + ")",
       handler
     );
   },

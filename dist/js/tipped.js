@@ -1,6 +1,6 @@
 /*!
- * Tipped - A Complete Javascript Tooltip Solution - v4.7.0
- * (c) 2012-2019 Nick Stakenburg
+ * Tipped - A Complete Javascript Tooltip Solution - v4.7.1
+ * (c) 2012-2021 Nick Stakenburg
  *
  * http://www.tippedjs.com
  *
@@ -24,7 +24,7 @@
 var Tipped = {};
 
 $.extend(Tipped, {
-  version: '4.7.0'
+  version: '4.7.1'
 });
 
 Tipped.Skins = {
@@ -536,7 +536,7 @@ var Mouse = {
 
   getActualPosition: function(event) {
     var position =
-      event && $.type(event.pageX) === "number" ? event : this._buffer;
+      event && typeof event.pageX === "number" ? event : this._buffer;
 
     return {
       left: position.pageX,
@@ -690,7 +690,7 @@ function Visible() {
 
 $.extend(Visible.prototype, {
   initialize: function(elements) {
-    elements = $.type(elements) == 'array' ? elements : [elements]; // ensure array
+    elements = elements instanceof Array ? elements : [elements]; // ensure array
     this.elements = elements;
 
     this._restore = [];
@@ -781,12 +781,12 @@ var Voila = (function($) {
       return new Voila(elements, opts, cb);
     }
 
-    var argTypeOne = $.type(arguments[1]),
+    var argTypeOne = typeof arguments[1],
       options = argTypeOne === "object" ? arguments[1] : {},
       callback =
         argTypeOne === "function"
           ? arguments[1]
-          : $.type(arguments[2]) === "function"
+          : typeof arguments[2] === "function"
           ? arguments[2]
           : false;
 
@@ -815,7 +815,7 @@ var Voila = (function($) {
     _add: function(elements) {
       // normalize to an array
       var array =
-        $.type(elements) == "string"
+        typeof elements === "string"
           ? $(elements) // selector
           : elements instanceof jQuery || elements.length > 0
           ? elements // jQuery obj, Array
@@ -979,7 +979,7 @@ var Voila = (function($) {
             if (this._time >= this.options.intervals[this._ipos][0]) {
               // timeout when no next interval
               if (!this.options.intervals[this._ipos + 1]) {
-                if ($.type(this._timeout) == "function") {
+                if (typeof this._timeout === "function") {
                   this._timeout();
                 }
                 return;
@@ -1269,7 +1269,7 @@ var Options = {
     // hideOn helper
     function toDisplayObject(input, display) {
       var on;
-      if ($.type(input) === "string") {
+      if ( typeof input === "string") {
         on = {
           element:
             (RESET[display] && RESET[display].element) || BASE[display].element,
@@ -1336,7 +1336,7 @@ var Options = {
         var RESET_ajax = RESET.ajax || {},
           BASE_ajax = BASE.ajax;
 
-        if ($.type(MERGED.ajax) === "boolean") {
+        if ( typeof MERGED.ajax === "boolean") {
           // true
           MERGED.ajax = {
             //method: RESET_ajax.type || BASE_ajax.type
@@ -1349,9 +1349,9 @@ var Options = {
       var position;
       var targetPosition = (targetPosition =
         (MERGED.position && MERGED.position.target) ||
-        ($.type(MERGED.position) === "string" && MERGED.position) ||
+        ( typeof MERGED.position === "string" && MERGED.position) ||
         (RESET.position && RESET.position.target) ||
-        ($.type(RESET.position) === "string" && RESET.position) ||
+        ( typeof RESET.position === "string" && RESET.position) ||
         (BASE.position && BASE.position.target) ||
         BASE.position);
       targetPosition = middleize(targetPosition);
@@ -1364,7 +1364,7 @@ var Options = {
       tooltipPosition = middleize(tooltipPosition);
 
       if (MERGED.position) {
-        if ($.type(MERGED.position) === "string") {
+        if (typeof MERGED.position === "string") {
           MERGED.position = middleize(MERGED.position);
           position = {
             target: MERGED.position,
@@ -1466,7 +1466,7 @@ var Options = {
         // otherwise we'd always have the BASE/RESET object for it as starting point
         var showOn = MERGED.showOn;
 
-        if ($.type(showOn) === "string") {
+        if ( typeof showOn === "string") {
           showOn = { element: showOn };
         }
 
@@ -1476,7 +1476,7 @@ var Options = {
       if (MERGED.hideOn) {
         var hideOn = MERGED.hideOn;
 
-        if ($.type(hideOn) === "string") {
+        if (typeof hideOn === "string") {
           hideOn = { element: hideOn };
         }
 
@@ -1485,7 +1485,7 @@ var Options = {
 
       // normalize inline
       if (MERGED.inline) {
-        if ($.type(MERGED.inline) !== "string") {
+        if (typeof MERGED.inline !== "string") {
           MERGED.inline = false;
         }
       }
@@ -1499,7 +1499,7 @@ var Options = {
         if (!Spin.supported) {
           MERGED.spinner = false;
         } else {
-          if ($.type(MERGED.spinner) === "boolean") {
+          if (typeof MERGED.spinner === "boolean") {
             MERGED.spinner = RESET.spinner || BASE.spinner || {};
           }
         }
@@ -1510,7 +1510,7 @@ var Options = {
       }
 
       if (MERGED.containment) {
-        if ($.type(MERGED.containment) === "string") {
+        if (typeof MERGED.containment === "string") {
           MERGED.containment = {
             selector: MERGED.containment,
             padding:
@@ -2936,10 +2936,10 @@ var Tooltips = {
     this.reset();
 
     this._resizeHandler = $.proxy(this.onWindowResize, this);
-    $(window).bind("resize orientationchange", this._resizeHandler);
+    $(window).on("resize orientationchange", this._resizeHandler);
 
     if (Browser.MobileSafari) {
-      $("body").bind("click", this._emptyClickHandler);
+      $("body").on("click", this._emptyClickHandler);
     }
   },
 
@@ -2949,11 +2949,11 @@ var Tooltips = {
     Delegations.removeAll();
 
     if (this._resizeHandler) {
-      $(window).unbind("resize orientationchange", this._resizeHandler);
+      $(window).off("resize orientationchange", this._resizeHandler);
     }
 
     if (Browser.MobileSafari) {
-      $("body").unbind("click", this._emptyClickHandler);
+      $("body").off("click", this._emptyClickHandler);
     }
   },
 
@@ -3048,7 +3048,7 @@ var Tooltips = {
           }
         }, this)
       );
-    } else if ($.type(element) === "string") {
+    } else if (typeof element === "string") {
       // selector
       $.each(this.tooltips, function(i, tooltip) {
         if (tooltip.element && $(tooltip.element).is(element)) {
@@ -3359,7 +3359,7 @@ $.extend(Tooltip.prototype, {
 
     var options;
     if (
-      $.type(content) === "object" &&
+      typeof content === "object" &&
       !(
         _.isElement(content) ||
         _.isText(content) ||
@@ -3441,7 +3441,7 @@ $.extend(Tooltip.prototype, {
 
     this.content = content;
     this.title = $(this.element).data("tipped-title");
-    if ($.type(this.options.title) != "undefined")
+    if (typeof this.options.title !== "undefined")
       this.title = this.options.title;
 
     this.zIndex = this.options.zIndex || +Tooltips.options.startingZIndex;
@@ -3497,7 +3497,7 @@ $.extend(Tooltip.prototype, {
     }
 
     // function as content
-    if ($.type(this.content) === "function") {
+    if ( typeof this.content === "function") {
       this._fn = this.content;
     }
 
@@ -3566,7 +3566,7 @@ $.extend(Tooltip.prototype, {
   attach: function() {
     if (this.is("detached")) {
       var container;
-      if ($.type(this.options.container) === "string") {
+      if ( typeof this.options.container === "string") {
         var target = this.target;
         if (target === "mouse") {
           target = this.element;
@@ -3688,9 +3688,9 @@ $.extend(Tooltip.prototype, {
 
   createPostBuildObservers: function() {
     // x
-    this._tooltip.delegate(
-      ".tpd-close, .close-tooltip",
+    this._tooltip.on(
       "click",
+      ".tpd-close, .close-tooltip",
       $.proxy(function(event) {
         // this helps prevent the click on x to trigger a click on the body
         // which could conflict with some scripts
@@ -4021,7 +4021,7 @@ $.extend(Tooltip.prototype, {
     shq.queue(
       $.proxy(function(next_onshow) {
         // only fire it here if we've already updated
-        if (this.is("updated") && $.type(this.options.onShow) === "function") {
+        if (this.is("updated") && typeof this.options.onShow === "function") {
           //
           var visible = new Visible(this._tooltip);
           this.options.onShow(this._content[0], this.element); // todo: update
@@ -4045,9 +4045,9 @@ $.extend(Tooltip.prototype, {
 
   _show: function(duration, callback) {
     duration =
-      ($.type(duration) === "number" ? duration : this.options.fadeIn) || 0;
+      ( typeof duration === "number" ? duration : this.options.fadeIn) || 0;
     callback =
-      callback || ($.type(arguments[0]) == "function" ? arguments[0] : false);
+      callback || (typeof arguments[0] === "function" ? arguments[0] : false);
 
     // hide others
     if (this.options.hideOthers) {
@@ -4119,7 +4119,7 @@ $.extend(Tooltip.prototype, {
       }, this)
     );
 
-    if ($.type(this.options.afterHide) === "function" && this.is("updated")) {
+    if (typeof this.options.afterHide === "function" && this.is("updated")) {
       shq.queue(
         $.proxy(function(next_afterhide) {
           this.options.afterHide(this._content[0], this.element); // TODO: update
@@ -4142,7 +4142,7 @@ $.extend(Tooltip.prototype, {
     }
 
     // callback
-    if ($.type(callback) === "function") {
+    if (typeof callback === "function") {
       shq.queue(function(next_callback) {
         callback();
         next_callback();
@@ -4160,7 +4160,7 @@ $.extend(Tooltip.prototype, {
 
   _hide: function(instant, callback) {
     callback =
-      callback || ($.type(arguments[0]) === "function" ? arguments[0] : false);
+      callback || (typeof arguments[0] === "function" ? arguments[0] : false);
 
     this.attach();
 
@@ -4411,7 +4411,7 @@ $.extend(Tooltip.prototype, {
               options[cb],
               $.proxy(function(proceed) {
                 var args = _slice.call(arguments, 1),
-                  jqXHR = $.type(args[0] === "object") ? args[0] : args[2]; // success callback has jqXHR as 3th arg, complete and error as 1st
+                  jqXHR = (typeof args[0] === "object") ? args[0] : args[2]; // success callback has jqXHR as 3th arg, complete and error as 1st
 
                 // don't store aborts
                 if (jqXHR.statusText && jqXHR.statusText === "abort") return;
@@ -4453,7 +4453,7 @@ $.extend(Tooltip.prototype, {
           $.each(
             entry.callbacks,
             $.proxy(function(cb, args) {
-              if ($.type(options[cb]) === "function") {
+              if (typeof options[cb] === "function") {
                 options[cb].apply(this, args);
               }
             }, this)
@@ -4480,7 +4480,7 @@ $.extend(Tooltip.prototype, {
     };
 
     if (
-      $.type(content) === "string" ||
+      typeof content === "string" ||
       _.isElement(content) ||
       _.isText(content) ||
       _.isDocumentFragment(content) ||
@@ -4511,7 +4511,7 @@ $.extend(Tooltip.prototype, {
     // append instantly
     this._content.html(this.content);
 
-    this._title.html(title && $.type(title) === "string" ? title : "");
+    this._title.html(title && typeof title === "string" ? title : "");
     this._titleWrapper[title ? "show" : "hide"]();
     this._close[
       (this.title || this.options.title) && close ? "show" : "hide"
@@ -4654,7 +4654,7 @@ $.extend(Tooltip.prototype, {
     this.is("updated", true);
     this.is("updating", false);
 
-    if ($.type(this.options.afterUpdate) === "function") {
+    if (typeof this.options.afterUpdate === "function") {
       // make sure visibility is visible during this
       var isHidden = this._contentWrapper.css("visibility");
       if (isHidden) this._contentWrapper.css({ visibility: "visible" });
@@ -5706,7 +5706,7 @@ $.extend(Tooltip.prototype, {
       // handle a different container
       var container;
       if (this.options.container !== document.body) {
-        if ($.type(this.options.container) === "string") {
+        if ( typeof this.options.container === "string") {
           var target = this.target;
           if (target === "mouse") {
             target = this.element;
@@ -6135,7 +6135,7 @@ $.extend(Tooltip.prototype, {
       handler: cachedHandler
     });
 
-    $(element).bind(eventName, cachedHandler);
+    $(element).on(eventName, cachedHandler);
   },
 
   unbind: function() {
@@ -6162,7 +6162,7 @@ $.extend(Tooltip.prototype, {
 $.extend(Tooltip.prototype, {
   // states
   is: function(question, answer) {
-    if ($.type(answer) === "boolean") {
+    if (typeof answer === "boolean") {
       this._cache.is[question] = answer;
     }
 
@@ -6242,7 +6242,7 @@ $.extend(Tipped, {
   visible: function(selector) {
     if (_.isElement(selector)) {
       return Tooltips.isVisibleByElement(selector);
-    } else if ($.type(selector) !== "undefined") {
+    } else if ( typeof selector !== "undefined") {
       var elements = $(selector),
         visible = 0;
       $.each(elements, function(i, element) {
@@ -6298,7 +6298,7 @@ var Delegations = {
 
   add: function(selector, content, options) {
     var options;
-    if ($.type(content) === "object" && !_.isElement(content)) {
+    if ( typeof content === "object" && !_.isElement(content)) {
       options = content;
       content = null;
     } else {
@@ -6332,16 +6332,16 @@ var Delegations = {
     };
 
     this._delegations[uid].removeTitleHandler = $.proxy(this.removeTitle, this);
-    $(document).delegate(
-      selector + ":not(.tpd-delegation-uid-" + uid + ")",
+    $(document).on(
       "mouseenter",
+      selector + ":not(.tpd-delegation-uid-" + uid + ")",
       this._delegations[uid].removeTitleHandler
     );
 
     this._delegations[uid].handler = handler;
-    $(document).delegate(
-      selector + ":not(.tpd-delegation-uid-" + uid + ")",
+    $(document).on(
       ttOptions.showOn.element,
+      selector + ":not(.tpd-delegation-uid-" + uid + ")",
       handler
     );
   },

@@ -12,10 +12,10 @@ var Tooltips = {
     this.reset();
 
     this._resizeHandler = $.proxy(this.onWindowResize, this);
-    $(window).bind("resize orientationchange", this._resizeHandler);
+    $(window).on("resize orientationchange", this._resizeHandler);
 
     if (Browser.MobileSafari) {
-      $("body").bind("click", this._emptyClickHandler);
+      $("body").on("click", this._emptyClickHandler);
     }
   },
 
@@ -25,11 +25,11 @@ var Tooltips = {
     Delegations.removeAll();
 
     if (this._resizeHandler) {
-      $(window).unbind("resize orientationchange", this._resizeHandler);
+      $(window).off("resize orientationchange", this._resizeHandler);
     }
 
     if (Browser.MobileSafari) {
-      $("body").unbind("click", this._emptyClickHandler);
+      $("body").off("click", this._emptyClickHandler);
     }
   },
 
@@ -124,7 +124,7 @@ var Tooltips = {
           }
         }, this)
       );
-    } else if ($.type(element) === "string") {
+    } else if (typeof element === "string") {
       // selector
       $.each(this.tooltips, function(i, tooltip) {
         if (tooltip.element && $(tooltip.element).is(element)) {

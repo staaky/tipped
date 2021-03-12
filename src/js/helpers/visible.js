@@ -4,7 +4,7 @@ function Visible() {
 
 $.extend(Visible.prototype, {
   initialize: function(elements) {
-    elements = $.type(elements) == 'array' ? elements : [elements]; // ensure array
+    elements = elements instanceof Array ? elements : [elements]; // ensure array
     this.elements = elements;
 
     this._restore = [];

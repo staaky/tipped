@@ -25,7 +25,7 @@ var Mouse = {
 
   getActualPosition: function(event) {
     var position =
-      event && $.type(event.pageX) === "number" ? event : this._buffer;
+      event && typeof event.pageX === "number" ? event : this._buffer;
 
     return {
       left: position.pageX,

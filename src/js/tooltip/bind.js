@@ -9,7 +9,7 @@ $.extend(Tooltip.prototype, {
       handler: cachedHandler
     });
 
-    $(element).bind(eventName, cachedHandler);
+    $(element).on(eventName, cachedHandler);
   },
 
   unbind: function() {
