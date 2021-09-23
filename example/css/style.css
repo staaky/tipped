@@ -1,0 +1,120 @@
+/* RESET */
+html,
+body,
+div,
+ul,
+ol,
+li,
+dl,
+dt,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+form,
+p,
+blockquote,
+fieldset,
+input {
+  margin: 0;
+  padding: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+address,
+caption,
+cite,
+code,
+th {
+  font-size: 1em;
+  font-weight: normal;
+  font-style: normal;
+}
+ul,
+ol {
+  list-style: none;
+}
+fieldset,
+img {
+  border: none;
+}
+caption,
+th {
+  text-align: left;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+html {
+  font: 14px/22px "BemboStd-Regular", Georgia, Times, "Times New Roman", serif;
+}
+body {
+  font: 14px/22px "BemboStd-Regular", Georgia, Times, "Times New Roman", serif;
+  background-color: #646461;
+  background: #fff;
+  color: #333;
+}
+p {
+  margin-bottom: 32px;
+  clear: both;
+}
+a {
+  color: #0088cc;
+  text-decoration: none;
+  outline-style: none;
+  background: #f0f8fd;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* box-sizing*/
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+#page {
+  clear: both;
+  width: 100%;
+  padding: 5rem 2rem;
+  font-size: inherit;
+}
+
+.demonstrations {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 300px;
+}
+.demonstrations .box {
+  position: relative;
+  overflow: hidden;
+  height: 60px;
+  width: calc((100% - (6 * 5px)) / 3);
+  margin: 5px;
+  line-height: 60px;
+  background: #ccc;
+  cursor: pointer;
+  font-style: italic;
+  font-family: Georgia, Times, "Times New Roman", serif;
+  color: #444;
+  text-shadow: 0 1px 0 rgb(255 255 255);
+  text-align: center;
+}

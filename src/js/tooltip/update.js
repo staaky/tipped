@@ -1,5 +1,5 @@
 $.extend(Tooltip.prototype, {
-  createElementMarker: function(callback) {
+  createElementMarker: function () {
     // marker for inline content
     if (
       !this.elementMarker &&
@@ -19,7 +19,7 @@ $.extend(Tooltip.prototype, {
     }
   },
 
-  restoreElementToMarker: function() {
+  restoreElementToMarker: function () {
     var rid;
 
     if (this.elementMarker && this.content) {
@@ -28,13 +28,11 @@ $.extend(Tooltip.prototype, {
         $(this.content).css({ display: rid });
       }
 
-      $(this.elementMarker)
-        .before(this.content)
-        .remove();
+      $(this.elementMarker).before(this.content).remove();
     }
   },
 
-  startLoading: function() {
+  startLoading: function () {
     if (this.is("loading")) return;
 
     // make sure the tooltip is build, otherwise there won't be a skin
@@ -58,7 +56,7 @@ $.extend(Tooltip.prototype, {
     }
   },
 
-  stopLoading: function() {
+  stopLoading: function () {
     // make sure the tooltip is build, otherwise there won't be a skin
     this.build();
 
@@ -72,20 +70,20 @@ $.extend(Tooltip.prototype, {
   },
 
   // abort
-  abort: function() {
+  abort: function () {
     this.abortAjax();
     this.abortSanitize();
     this.is("refreshed-before-sanitized", false);
   },
 
-  abortSanitize: function() {
+  abortSanitize: function () {
     if (this._cache.voila) {
       this._cache.voila.abort();
       this._cache.voila = null;
     }
   },
 
-  abortAjax: function() {
+  abortAjax: function () {
     if (this._cache.xhr) {
       this._cache.xhr.abort();
       this._cache.xhr = null;
@@ -94,7 +92,7 @@ $.extend(Tooltip.prototype, {
     }
   },
 
-  update: function(callback) {
+  update: function (callback) {
     if (this.is("updating")) return;
 
     // mark as updating
@@ -176,25 +174,25 @@ $.extend(Tooltip.prototype, {
         // make sure there are callbacks
         $.each(
           "complete error success".split(" "),
-          $.proxy(function(i, cb) {
+          function (i, cb) {
             if (!options[cb]) {
               if (cb === "success") {
                 // when no success callback is given create a callback that sets
                 // the responseText as content, otherwise we use the given one
-                options[cb] = function(data, textStatus, jqXHR) {
+                options[cb] = function (data, textStatus, jqXHR) {
                   return jqXHR.responseText;
                 };
               } else {
                 // for every other callback use an empty one
-                options[cb] = function() {};
+                options[cb] = function () {};
               }
             }
 
             options[cb] = _.wrap(
               options[cb],
-              $.proxy(function(proceed) {
+              function (proceed) {
                 var args = _slice.call(arguments, 1),
-                  jqXHR = $.type(args[0] === "object") ? args[0] : args[2]; // success callback has jqXHR as 3th arg, complete and error as 1st
+                  jqXHR = typeof args[0] === "object" ? args[0] : args[2]; // success callback has jqXHR as 3th arg, complete and error as 1st
 
                 // don't store aborts
                 if (jqXHR.statusText && jqXHR.statusText === "abort") return;
@@ -205,7 +203,7 @@ $.extend(Tooltip.prototype, {
                     {
                       url: options.url,
                       type: options.type,
-                      data: options.data
+                      data: options.data,
                     },
                     cb,
                     args
@@ -220,9 +218,9 @@ $.extend(Tooltip.prototype, {
                 if (updateWith) {
                   this._update(updateWith, callback);
                 }
-              }, this)
+              }.bind(this)
             );
-          }, this)
+          }.bind(this)
         );
 
         // try cache first, for entries that have previously been successful
@@ -235,11 +233,11 @@ $.extend(Tooltip.prototype, {
           // if there is a cache, still call success and complete, but clear out the api
           $.each(
             entry.callbacks,
-            $.proxy(function(cb, args) {
-              if ($.type(options[cb]) === "function") {
+            function (cb, args) {
+              if (typeof options[cb] === "function") {
                 options[cb].apply(this, args);
               }
-            }, this)
+            }.bind(this)
           );
 
           // stop here and avoid the request
@@ -255,15 +253,15 @@ $.extend(Tooltip.prototype, {
     }
   },
 
-  _update: function(content, callback) {
+  _update: function (content, callback) {
     // defaults
     var data = {
       title: this.options.title,
-      close: this.options.close
+      close: this.options.close,
     };
 
     if (
-      $.type(content) === "string" ||
+      typeof content === "string" ||
       _.isElement(content) ||
       _.isText(content) ||
       _.isDocumentFragment(content) ||
@@ -294,7 +292,7 @@ $.extend(Tooltip.prototype, {
     // append instantly
     this._content.html(this.content);
 
-    this._title.html(title && $.type(title) === "string" ? title : "");
+    this._title.html(title && typeof title === "string" ? title : "");
     this._titleWrapper[title ? "show" : "hide"]();
     this._close[
       (this.title || this.options.title) && close ? "show" : "hide"
@@ -321,7 +319,7 @@ $.extend(Tooltip.prototype, {
     this.finishUpdate(callback);
   },
 
-  sanitize: function(callback) {
+  sanitize: function (callback) {
     // if the images loaded plugin isn't loaded, just callback
     if (
       !this.options.voila || // also callback on manual disable
@@ -339,7 +337,7 @@ $.extend(Tooltip.prototype, {
     this._cache.voila = Voila(
       this._content,
       { method: "onload" },
-      $.proxy(function(instance) {
+      function (instance) {
         // mark images as sanitized so we can avoid sanitizing them again
         // for an instant refresh() later
         this._markImagesAsSanitized(instance.images);
@@ -352,25 +350,25 @@ $.extend(Tooltip.prototype, {
           this.is("sanitized", true);
           if (callback) callback();
         }
-      }, this)
+      }.bind(this)
     );
   },
 
   // expects a voila.image instance
-  _markImagesAsSanitized: function(images) {
-    $.each(images, function(i, image) {
+  _markImagesAsSanitized: function (images) {
+    $.each(images, function (i, image) {
       var img = image.img;
       $(img).data("completed-src", image.img.src);
     });
   },
 
-  _hasAllImagesSanitized: function() {
+  _hasAllImagesSanitized: function () {
     var sanitizedAll = true;
 
     // as soon as we find one image that isn't sanitized
     // or sanitized based on the wrong source we
     // have to sanitize again
-    this._content.find("img").each(function(i, img) {
+    this._content.find("img").each(function (_i, img) {
       var completedSrc = $(img).data("completed-src");
       if (!(completedSrc && img.src === completedSrc)) {
         sanitizedAll = false;
@@ -381,7 +379,7 @@ $.extend(Tooltip.prototype, {
     return sanitizedAll;
   },
 
-  refresh: function() {
+  refresh: function () {
     if (!this.visible()) return;
 
     // avoid refreshing while sanitize() still needs to finish up
@@ -417,7 +415,7 @@ $.extend(Tooltip.prototype, {
       this.startLoading();
 
       this.sanitize(
-        $.proxy(function() {
+        function () {
           this._contentWrapper.css({ visibility: "visible" });
 
           this.stopLoading();
@@ -428,16 +426,16 @@ $.extend(Tooltip.prototype, {
 
           this.position();
           this.is("refreshing", false);
-        }, this)
+        }.bind(this)
       );
     }
   },
 
-  finishUpdate: function(callback) {
+  finishUpdate: function (callback) {
     this.is("updated", true);
     this.is("updating", false);
 
-    if ($.type(this.options.afterUpdate) === "function") {
+    if (typeof this.options.afterUpdate === "function") {
       // make sure visibility is visible during this
       var isHidden = this._contentWrapper.css("visibility");
       if (isHidden) this._contentWrapper.css({ visibility: "visible" });
@@ -448,5 +446,5 @@ $.extend(Tooltip.prototype, {
     }
 
     if (callback) callback();
-  }
+  },
 });

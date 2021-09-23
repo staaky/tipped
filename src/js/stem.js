@@ -3,7 +3,7 @@ function Stem() {
 }
 
 $.extend(Stem.prototype, {
-  initialize: function(element, skin) {
+  initialize: function (element, skin) {
     this.element = $(element);
     if (!this.element[0]) return;
 
@@ -14,7 +14,7 @@ $.extend(Stem.prototype, {
       width: this.element.innerWidth(),
       height: this.element.innerHeight(),
       offset: parseFloat(this.element.css("margin-left")), // side
-      spacing: parseFloat(this.element.css("margin-top"))
+      spacing: parseFloat(this.element.css("margin-top")),
     });
     this.element.addClass("tpd-stem-reset");
 
@@ -26,11 +26,11 @@ $.extend(Stem.prototype, {
     this.build();
   },
 
-  destroy: function() {
+  destroy: function () {
     this.element.html("");
   },
 
-  build: function() {
+  build: function () {
     this.destroy();
 
     // figure out low opacity based on the background color
@@ -49,7 +49,7 @@ $.extend(Stem.prototype, {
     this[(this._useTransform ? "build" : "buildNo") + "Transform"]();
   },
 
-  buildTransform: function() {
+  buildTransform: function () {
     this.element.append(
       (this.spacer = $("<div>")
         .addClass("tpd-stem-spacer")
@@ -85,7 +85,7 @@ $.extend(Stem.prototype, {
 
     this.element.find(".tpd-stem-spacer").css({
       width: _flip ? md.inside.height : md.inside.width,
-      height: _flip ? md.inside.width : md.inside.height
+      height: _flip ? md.inside.width : md.inside.height,
     });
     if (_side === "top" || _side === "left") {
       var _scss = {};
@@ -102,7 +102,7 @@ $.extend(Stem.prototype, {
 
     this.transform.css({
       width: md.inside.width * _m,
-      height: md.inside.height * _m
+      height: md.inside.height * _m,
     });
 
     // adjust the dimensions of the element to that of the
@@ -113,7 +113,7 @@ $.extend(Stem.prototype, {
       "background-color": "transparent",
       "border-bottom-color": this._css.backgroundColor,
       "border-left-width": md.inside.width * 0.5 * _m,
-      "border-bottom-width": md.inside.height * _m
+      "border-bottom-width": md.inside.height * _m,
     };
     triangleStyle[_transform] = "translate(" + math.border * _m + "px, 0)";
     this.element.find(".tpd-stem-triangle").css(triangleStyle);
@@ -140,7 +140,7 @@ $.extend(Stem.prototype, {
       width: math.border * _m,
       "margin-left": -2 * math.border * _m,
       "border-color": borderColor,
-      opacity: alpha
+      opacity: alpha,
     };
     borderStyle[_transform] =
       "skew(" +
@@ -173,7 +173,7 @@ $.extend(Stem.prototype, {
       opacity: alpha,
       // setting opacity here causes a flicker in firefox, it's set in css now
       // 'opacity': this._css.borderOpacity,
-      "margin-left": -2 * math.border * _m
+      "margin-left": -2 * math.border * _m,
     };
     borderCornerStyle[_transform] =
       "skew(" +
@@ -204,11 +204,11 @@ $.extend(Stem.prototype, {
 
     this.element.css({
       width: _flip ? md.outside.height : md.outside.width,
-      height: _flip ? md.outside.width : md.outside.height
+      height: _flip ? md.outside.width : md.outside.height,
     });
   },
 
-  buildNoTransform: function() {
+  buildNoTransform: function () {
     this.element.append(
       (this.spacer = $("<div>")
         .addClass("tpd-stem-spacer")
@@ -243,7 +243,7 @@ $.extend(Stem.prototype, {
 
     this.element.css({
       width: _flip ? md.outside.height : md.outside.width,
-      height: _flip ? md.outside.width : md.outside.height
+      height: _flip ? md.outside.width : md.outside.height,
     });
 
     // handle spacer
@@ -252,7 +252,7 @@ $.extend(Stem.prototype, {
       .add(this.element.find(".tpd-stem-spacer"))
       .css({
         width: _flip ? md.inside.height : md.inside.width,
-        height: _flip ? md.inside.width : md.inside.height
+        height: _flip ? md.inside.width : md.inside.height,
       });
     if (_side === "top" || _side === "left") {
       var _scss = {};
@@ -270,12 +270,12 @@ $.extend(Stem.prototype, {
     // resets
     this.element.find(".tpd-stem-border").css({
       width: "100%",
-      background: "transparent"
+      background: "transparent",
     });
 
     // == on bottom
     var borderCornerStyle = {
-      opacity: 1
+      opacity: 1,
     };
 
     borderCornerStyle[_flip ? "height" : "width"] = "100%";
@@ -291,7 +291,7 @@ $.extend(Stem.prototype, {
     var borderStyle = {
       width: 0,
       "background-color": "transparent",
-      opacity: 1
+      opacity: 1,
     };
 
     var borderSideCSS = md.inside.width * 0.5 + "px solid transparent";
@@ -304,7 +304,7 @@ $.extend(Stem.prototype, {
       var shared = {
         "margin-left": -0.5 * md.inside.width,
         "border-left": borderSideCSS,
-        "border-right": borderSideCSS
+        "border-right": borderSideCSS,
       };
 
       // ==
@@ -323,11 +323,11 @@ $.extend(Stem.prototype, {
       this.element
         .find(".tpd-stem-border-center-offset")
         .css({
-          "margin-top": -1 * this._css.border * (_bottom ? -1 : 1)
+          "margin-top": -1 * this._css.border * (_bottom ? -1 : 1),
         })
         .find(".tpd-stem-border-center-offset-inverse")
         .css({
-          "margin-top": this._css.border * (_bottom ? -1 : 1)
+          "margin-top": this._css.border * (_bottom ? -1 : 1),
         });
     } else {
       var shared = {
@@ -335,7 +335,7 @@ $.extend(Stem.prototype, {
         top: "50%",
         "margin-top": -0.5 * md.inside.width,
         "border-top": borderSideCSS,
-        "border-bottom": borderSideCSS
+        "border-bottom": borderSideCSS,
       };
 
       // ==
@@ -355,11 +355,11 @@ $.extend(Stem.prototype, {
       this.element
         .find(".tpd-stem-border-center-offset")
         .css({
-          "margin-left": -1 * this._css.border * (_right ? -1 : 1)
+          "margin-left": -1 * this._css.border * (_right ? -1 : 1),
         })
         .find(".tpd-stem-border-center-offset-inverse")
         .css({
-          "margin-left": this._css.border * (_right ? -1 : 1)
+          "margin-left": this._css.border * (_right ? -1 : 1),
         });
     }
 
@@ -374,7 +374,7 @@ $.extend(Stem.prototype, {
     }
   },
 
-  setPosition: function(position) {
+  setPosition: function (position) {
     this._position = position;
     this.transform.attr(
       "class",
@@ -382,7 +382,7 @@ $.extend(Stem.prototype, {
     );
   },
 
-  getMath: function() {
+  getMath: function () {
     var height = this._css.height,
       width = this._css.width,
       border = this._css.border;
@@ -400,7 +400,7 @@ $.extend(Stem.prototype, {
       top = border / Math.cos(((90 - corner_top) * Math.PI) / 180);
     var dimensions = {
       width: width + side * 2,
-      height: height + top
+      height: height + top,
     };
 
     var cut = Math.max(border, this._css.radius);
@@ -443,12 +443,12 @@ $.extend(Stem.prototype, {
       outside: outside,
       dimensions: {
         inside: inside,
-        outside: outside
+        outside: outside,
       },
       top: top,
       border: overstaand,
       skew: skew,
-      corner: cornerWidth
+      corner: cornerWidth,
     };
-  }
+  },
 });

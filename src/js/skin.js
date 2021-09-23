@@ -3,7 +3,7 @@ function Skin() {
 }
 
 $.extend(Skin.prototype, {
-  initialize: function(tooltip) {
+  initialize: function (tooltip) {
     this.tooltip = tooltip;
     this.element = tooltip._skin;
 
@@ -56,9 +56,9 @@ $.extend(Skin.prototype, {
       spinner: {
         dimensions: {
           width: spinner.innerWidth(),
-          height: spinner.innerHeight()
-        }
-      }
+          height: spinner.innerHeight(),
+        },
+      },
     };
 
     spinner.remove();
@@ -69,22 +69,22 @@ $.extend(Skin.prototype, {
     this._vars = {};
   },
 
-  destroy: function() {
+  destroy: function () {
     if (!this.frames) return;
 
     // remove all the stems
     $.each(
       "top right bottom left".split(" "),
-      $.proxy(function(i, side) {
+      function (_i, side) {
         if (this["stem_" + side]) this["stem_" + side].destroy();
-      }, this)
+      }.bind(this)
     );
 
     this.frames.remove();
     this.frames = null;
   },
 
-  build: function() {
+  build: function () {
     // if already build exit
     if (this.frames) return;
 
@@ -92,9 +92,9 @@ $.extend(Skin.prototype, {
 
     $.each(
       "top right bottom left".split(" "),
-      $.proxy(function(i, side) {
+      function (_i, side) {
         this.insertFrame(side);
-      }, this)
+      }.bind(this)
     );
 
     // insert a spinner, if we haven't already
@@ -108,7 +108,7 @@ $.extend(Skin.prototype, {
     }
   },
 
-  _frame: (function() {
+  _frame: (function () {
     var backgrounds;
 
     var frame = $("<div>")
@@ -135,7 +135,7 @@ $.extend(Skin.prototype, {
 
     $.each(
       "top right bottom left".split(" "),
-      $.proxy(function(i, s) {
+      function (_i, s) {
         backgrounds.append(
           $("<div>")
             .addClass("tpd-background-box tpd-background-box-" + s)
@@ -157,20 +157,18 @@ $.extend(Skin.prototype, {
                       )
                     )
                     .append(
-                      $("<div>")
-                        .addClass("tpd-background-border-hack")
-                        .hide()
+                      $("<div>").addClass("tpd-background-border-hack").hide()
                     )
                 )
             )
         );
-      }, this)
+      }.bind(this)
     );
 
     return frame;
   })(),
 
-  _getFrame: function(side) {
+  _getFrame: function (side) {
     var frame = this._frame.clone();
 
     // class
@@ -193,14 +191,14 @@ $.extend(Skin.prototype, {
     );
     frame.find(".tpd-background-title").css({
       "border-top-left-radius": innerBackgroundRadius,
-      "border-top-right-radius": innerBackgroundRadius
+      "border-top-right-radius": innerBackgroundRadius,
     });
     frame.find(".tpd-background-content").css({
       "border-bottom-left-radius": innerBackgroundRadius,
-      "border-bottom-right-radius": innerBackgroundRadius
+      "border-bottom-right-radius": innerBackgroundRadius,
     });
     frame.find(".tpd-background-loading").css({
-      "border-radius": innerBackgroundRadius
+      "border-radius": innerBackgroundRadius,
     });
 
     // adjust the dimensions of the shift sides
@@ -212,7 +210,7 @@ $.extend(Skin.prototype, {
       top: "bottom",
       bottom: "top",
       left: "right",
-      right: "left"
+      right: "left",
     };
     ss[inverse[side]] = 0;
     frame.find(".tpd-shift-stem-side").css(ss);
@@ -220,7 +218,7 @@ $.extend(Skin.prototype, {
     return frame;
   },
 
-  insertFrame: function(side) {
+  insertFrame: function (side) {
     var frame = (this["frame_" + side] = this._getFrame(side));
     this.frames.append(frame);
 
@@ -231,7 +229,7 @@ $.extend(Skin.prototype, {
   },
 
   // Loading
-  startLoading: function() {
+  startLoading: function () {
     if (!this.tooltip.supportsLoading) return;
     this.build(); // make sure the tooltip is build
 
@@ -247,7 +245,7 @@ $.extend(Skin.prototype, {
 
   // the idea behind stopLoading is that dimensions are set right after calling this function
   // that's why we don't set the manually here
-  stopLoading: function() {
+  stopLoading: function () {
     if (!this.tooltip.supportsLoading || !this._spinner) return;
     this.build(); // make sure the tooltip is build
 
@@ -255,7 +253,7 @@ $.extend(Skin.prototype, {
   },
 
   // updates the background of the currently active side
-  updateBackground: function() {
+  updateBackground: function () {
     var frame = this._vars.frames[this._side];
 
     var backgroundDimensions = $.extend({}, frame.background.dimensions);
@@ -280,7 +278,7 @@ $.extend(Skin.prototype, {
         "border-top-left-radius": innerBackgroundRadius,
         "border-top-right-radius": innerBackgroundRadius,
         "border-bottom-left-radius": innerBackgroundRadius,
-        "border-bottom-right-radius": innerBackgroundRadius
+        "border-bottom-right-radius": innerBackgroundRadius,
       };
 
       // measure the title
@@ -293,7 +291,7 @@ $.extend(Skin.prototype, {
       // set all title dimensions
       this.element.find(".tpd-background-title").css({
         height: titleHeight,
-        width: backgroundDimensions.width
+        width: backgroundDimensions.width,
       });
 
       // remove radius at the top
@@ -311,7 +309,7 @@ $.extend(Skin.prototype, {
 
       // loading indicator
       this.element.find(".tpd-background-loading").css({
-        "background-color": this._css.backgroundColor
+        "background-color": this._css.backgroundColor,
       });
     } else {
       // no title or close button creates a bar at the top
@@ -342,7 +340,7 @@ $.extend(Skin.prototype, {
           height: backgroundDimensions.height,
           "border-radius": this._css.radius,
           "border-width": this._css.border,
-          "border-color": this._css.borderColor
+          "border-color": this._css.borderColor,
         })
         .show();
     }
@@ -350,7 +348,7 @@ $.extend(Skin.prototype, {
 
   // update dimensions of the currently active side
   // background + stem
-  paint: function() {
+  paint: function () {
     // don't update if we've already rendered the dimensions at current stem position
     if (
       this._paintedDimensions &&
@@ -379,7 +377,7 @@ $.extend(Skin.prototype, {
     this.element.find(".tpd-background").css(backgroundDimensions);
     this.element.find(".tpd-background-shadow").css({
       width: backgroundDimensions.width + 2 * this._css.border,
-      height: backgroundDimensions.height + 2 * this._css.border
+      height: backgroundDimensions.height + 2 * this._css.border,
     });
 
     // update background to the correct display method
@@ -408,7 +406,7 @@ $.extend(Skin.prototype, {
     f.find(".tpd-backgrounds").css(
       $.extend({}, value.background.position, {
         width: fdimensions.width - value.background.position.left,
-        height: fdimensions.height - value.background.position.top
+        height: fdimensions.height - value.background.position.top,
       })
     );
 
@@ -433,18 +431,18 @@ $.extend(Skin.prototype, {
         );
         smallBoxes.css({
           height: this._vars.cut,
-          width: this._css.border
+          width: this._css.border,
         });
 
         // align the bottom side with the bottom
         f.find(".tpd-background-box-bottom")
           .css({
-            top: value.dimensions.height - this._vars.cut
+            top: value.dimensions.height - this._vars.cut,
           })
           // shift right side back
           .find(".tpd-background-box-shift")
           .css({
-            "margin-top": -1 * value.dimensions.height + this._vars.cut
+            "margin-top": -1 * value.dimensions.height + this._vars.cut,
           });
 
         // both sides should now be moved left or right depending on the current side
@@ -454,12 +452,12 @@ $.extend(Skin.prototype, {
             : 0;
         smallBoxes
           .css({
-            left: moveSmallBy
+            left: moveSmallBy,
           })
           .find(".tpd-background-box-shift")
           .css({
             // inverse of the above
-            "margin-left": -1 * moveSmallBy
+            "margin-left": -1 * moveSmallBy,
           });
 
         // hide the background that will be replaced by the stemshift when we have a stem
@@ -471,17 +469,17 @@ $.extend(Skin.prototype, {
         if (name === "right") {
           // top can be resized to height - border
           f.find(".tpd-background-box-left").css({
-            width: value.dimensions.width - value.stemPx - this._css.border
+            width: value.dimensions.width - value.stemPx - this._css.border,
           });
         } else {
           f.find(".tpd-background-box-right")
             .css({
-              "margin-left": this._css.border //,
+              "margin-left": this._css.border, //,
               //height: (value.dimensions.height - value.stemPx - this._vars.border) + 'px'
             })
             .find(".tpd-background-box-shift")
             .css({
-              "margin-left": -1 * this._css.border
+              "margin-left": -1 * this._css.border,
             });
         }
 
@@ -490,10 +488,10 @@ $.extend(Skin.prototype, {
         var smallBox = f.find(".tpd-background-box-" + this._side);
         smallBox.css({
           height: value.dimensions.height - 2 * this._vars.cut, // resize
-          "margin-top": this._vars.cut
+          "margin-top": this._vars.cut,
         });
         smallBox.find(".tpd-background-box-shift").css({
-          "margin-top": -1 * this._vars.cut
+          "margin-top": -1 * this._vars.cut,
         });
       } else {
         // top or bottom
@@ -503,18 +501,18 @@ $.extend(Skin.prototype, {
         );
         smallBoxes.css({
           width: this._vars.cut,
-          height: this._css.border
+          height: this._css.border,
         });
 
         // align the right side with the right
         f.find(".tpd-background-box-right")
           .css({
-            left: value.dimensions.width - this._vars.cut
+            left: value.dimensions.width - this._vars.cut,
           })
           // shift right side back
           .find(".tpd-background-box-shift")
           .css({
-            "margin-left": -1 * value.dimensions.width + this._vars.cut
+            "margin-left": -1 * value.dimensions.width + this._vars.cut,
           });
 
         // both sides should now be moved up or down depending on the current side
@@ -524,12 +522,12 @@ $.extend(Skin.prototype, {
             : 0;
         smallBoxes
           .css({
-            top: moveSmallBy
+            top: moveSmallBy,
           })
           .find(".tpd-background-box-shift")
           .css({
             // inverse of the above
-            "margin-top": -1 * moveSmallBy
+            "margin-top": -1 * moveSmallBy,
           });
 
         // hide the background that will be replaced by the stemshift
@@ -541,16 +539,16 @@ $.extend(Skin.prototype, {
         if (name === "bottom") {
           // top can be resized to height - border
           f.find(".tpd-background-box-top").css({
-            height: value.dimensions.height - value.stemPx - this._css.border
+            height: value.dimensions.height - value.stemPx - this._css.border,
           });
         } else {
           f.find(".tpd-background-box-bottom")
             .css({
-              "margin-top": this._css.border
+              "margin-top": this._css.border,
             })
             .find(".tpd-background-box-shift")
             .css({
-              "margin-top": -1 * this._css.border
+              "margin-top": -1 * this._css.border,
             });
         }
 
@@ -559,10 +557,10 @@ $.extend(Skin.prototype, {
         var smallBox = f.find(".tpd-background-box-" + this._side);
         smallBox.css({
           width: value.dimensions.width - 2 * this._vars.cut,
-          "margin-left": this._vars.cut
+          "margin-left": this._vars.cut,
         });
         smallBox.find(".tpd-background-box-shift").css({
-          "margin-left": -1 * this._vars.cut
+          "margin-left": -1 * this._vars.cut,
         });
       }
     }
@@ -579,11 +577,11 @@ $.extend(Skin.prototype, {
       left:
         fbp.left +
         this._css.border +
-        (fbd.width * 0.5 - this._css.spinner.dimensions.width * 0.5)
+        (fbd.width * 0.5 - this._css.spinner.dimensions.width * 0.5),
     });
   },
 
-  getVars: function() {
+  getVars: function () {
     var padding = this._css.padding,
       radius = this._css.radius,
       border = this._css.border;
@@ -593,7 +591,7 @@ $.extend(Skin.prototype, {
     var vars = {
       frames: {},
       dimensions: dimensions,
-      maxStemHeight: maxStemHeight
+      maxStemHeight: maxStemHeight,
     };
 
     // set the cut
@@ -616,13 +614,13 @@ $.extend(Skin.prototype, {
     // positition the background and resize the outer frame
     $.each(
       "top right bottom left".split(" "),
-      $.proxy(function(i, side) {
+      function (_i, side) {
         var orientation = Position.getOrientation(side),
           isLR = orientation === "vertical";
 
         var frameDimensions = {
           width: dimensions.width + 2 * border,
-          height: dimensions.height + 2 * border
+          height: dimensions.height + 2 * border,
         };
 
         var shiftWidth =
@@ -634,8 +632,8 @@ $.extend(Skin.prototype, {
           position: { top: 0, left: 0 },
           background: {
             dimensions: $.extend({}, dimensions),
-            position: { top: 0, left: 0 }
-          }
+            position: { top: 0, left: 0 },
+          },
         };
         vars.frames[side] = frame;
 
@@ -651,9 +649,9 @@ $.extend(Skin.prototype, {
             position: { top: 0, left: 0 },
             dimensions: {
               width: isLR ? stemDimensions.height : shiftWidth,
-              height: isLR ? shiftWidth : stemDimensions.height
-            }
-          }
+              height: isLR ? shiftWidth : stemDimensions.height,
+            },
+          },
         });
 
         switch (side) {
@@ -676,22 +674,22 @@ $.extend(Skin.prototype, {
             }
             break;
         }
-      }, this)
+      }.bind(this)
     );
 
     // add connections
     vars.connections = {};
     $.each(
       Position.positions,
-      $.proxy(function(i, position) {
+      function (_i, position) {
         vars.connections[position] = this.getConnectionLayout(position, vars);
-      }, this)
+      }.bind(this)
     );
 
     return vars;
   },
 
-  setDimensions: function(dimensions) {
+  setDimensions: function (dimensions) {
     this.build();
 
     // don't update if nothing changed
@@ -704,13 +702,13 @@ $.extend(Skin.prototype, {
     this._vars = this.getVars();
   },
 
-  setSide: function(side) {
+  setSide: function (side) {
     this._side = side;
     this._vars = this.getVars();
   },
 
   // gets position and offset of the given stem
-  getConnectionLayout: function(position, vars) {
+  getConnectionLayout: function (position, vars) {
     var side = Position.getSide(position),
       orientation = Position.getOrientation(position),
       dimensions = vars.dimensions,
@@ -725,13 +723,13 @@ $.extend(Skin.prototype, {
 
     // at the end of this function we should know how much the stem is able to shift
     var layout = {
-      stem: {}
+      stem: {},
     };
     var move = {
       left: 0,
       right: 0,
       up: 0,
-      down: 0
+      down: 0,
     };
 
     var stemConnection = { top: 0, left: 0 },
@@ -799,8 +797,8 @@ $.extend(Skin.prototype, {
           left: left + stemWidth,
           //right: 0, // seems to work better in Chrome (subpixel bug)
           // but it fails in oldIE, se we add overlap to compensate
-          width: width - left - stemWidth + 1
-        }
+          width: width - left - stemWidth + 1,
+        },
       });
     } else {
       // we are dealing with height
@@ -857,8 +855,8 @@ $.extend(Skin.prototype, {
         before: { height: top },
         after: {
           top: top + stemWidth,
-          height: height - top - stemWidth + 1
-        }
+          height: height - top - stemWidth + 1,
+        },
       });
     }
 
@@ -873,7 +871,7 @@ $.extend(Skin.prototype, {
   // sets the stem as one of the available 12 positions
   // we also need to call this function without a stem because it sets
   // connections
-  setStemPosition: function(stemPosition, shift) {
+  setStemPosition: function (stemPosition, shift) {
     if (this._stemPosition !== stemPosition) {
       this._stemPosition = stemPosition;
       var side = Position.getSide(stemPosition);
@@ -886,7 +884,7 @@ $.extend(Skin.prototype, {
     }
   },
 
-  setStemShift: function(stemPosition, shift) {
+  setStemShift: function (stemPosition, shift) {
     var _shift = this._shift,
       _dimensions = this._dimensions;
     // return if we have the same shift on the same dimensions
@@ -904,7 +902,7 @@ $.extend(Skin.prototype, {
     this._shift = {
       stemPosition: stemPosition,
       shift: shift,
-      dimensions: _dimensions
+      dimensions: _dimensions,
     };
 
     var side = Position.getSide(stemPosition),
@@ -913,7 +911,7 @@ $.extend(Skin.prototype, {
       ],
       leftWidth = {
         x: { left: "left", width: "width" },
-        y: { left: "top", width: "height" }
+        y: { left: "top", width: "height" },
       }[xy],
       stem = this["stem_" + side],
       layout = deepExtend({}, this._vars.connections[stemPosition].stem);
@@ -930,5 +928,5 @@ $.extend(Skin.prototype, {
     stem.element.css(layout.position);
     stem.element.siblings(".tpd-shift-stem-side-before").css(layout.before);
     stem.element.siblings(".tpd-shift-stem-side-after").css(layout.after);
-  }
+  },
 });

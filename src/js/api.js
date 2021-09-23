@@ -1,9 +1,9 @@
 $.extend(Tipped, {
-  init: function() {
+  init: function () {
     Tooltips.init();
   },
 
-  create: function(element, content) {
+  create: function (element, content) {
     var options = $.extend({}, arguments[2] || {}),
       tooltips = [];
 
@@ -12,7 +12,7 @@ $.extend(Tipped, {
       tooltips.push(new Tooltip(element, content, options));
     } else {
       // assume selector
-      $(element).each(function(i, el) {
+      $(element).each(function (i, el) {
         tooltips.push(new Tooltip(el, content, options));
       });
     }
@@ -20,32 +20,32 @@ $.extend(Tipped, {
     return new Collection(tooltips);
   },
 
-  get: function(selector) {
+  get: function (selector) {
     var tooltips = Tooltips.get(selector);
     return new Collection(tooltips);
   },
 
-  findElement: function(element) {
+  findElement: function (element) {
     return Tooltips.findElement(element);
   },
 
-  hideAll: function() {
+  hideAll: function () {
     Tooltips.hideAll();
     return this;
   },
 
-  setDefaultSkin: function(name) {
+  setDefaultSkin: function (name) {
     Tooltips.setDefaultSkin(name);
     return this;
   },
 
-  visible: function(selector) {
+  visible: function (selector) {
     if (_.isElement(selector)) {
       return Tooltips.isVisibleByElement(selector);
-    } else if ($.type(selector) !== "undefined") {
+    } else if (typeof selector !== "undefined") {
       var elements = $(selector),
         visible = 0;
-      $.each(elements, function(i, element) {
+      $.each(elements, function (i, element) {
         if (Tooltips.isVisibleByElement(element)) visible++;
       });
       return visible;
@@ -54,29 +54,29 @@ $.extend(Tipped, {
     }
   },
 
-  clearAjaxCache: function() {
+  clearAjaxCache: function () {
     Tooltips.clearAjaxCache();
     return this;
   },
 
-  refresh: function(selector, doneCallback, progressCallback) {
+  refresh: function (selector, doneCallback, progressCallback) {
     Tooltips.refresh(selector, doneCallback, progressCallback);
     return this;
   },
 
-  setStartingZIndex: function(index) {
+  setStartingZIndex: function (index) {
     Tooltips.setStartingZIndex(index);
     return this;
   },
 
-  remove: function(selector) {
+  remove: function (selector) {
     Tooltips.remove(selector);
     return this;
-  }
+  },
 });
 
-$.each("show hide toggle disable enable".split(" "), function(i, name) {
-  Tipped[name] = function(selector) {
+$.each("show hide toggle disable enable".split(" "), function (i, name) {
+  Tipped[name] = function (selector) {
     this.get(selector)[name]();
     return this;
   };

@@ -3,23 +3,23 @@ function Collection() {
 }
 
 $.extend(Collection.prototype, {
-  initialize: function(tooltips) {
+  initialize: function (tooltips) {
     this.tooltips = tooltips;
     return this;
   },
 
-  items: function() {
+  items: function () {
     // everytime we grab a tooltip collection we'll clear the mouse buffer
     // this way it's never passed onto the elements
-    $.each(this.tooltips, function(i, tooltip) {
+    $.each(this.tooltips, function (i, tooltip) {
       tooltip.is("api", true);
     });
 
     return this.tooltips;
   },
 
-  refresh: function(callback) {
-    $.each(this._tooltips, function(i, tooltip) {
+  refresh: function () {
+    $.each(this._tooltips, function (_i, tooltip) {
       if (tooltip.is("visible")) {
         tooltip.refresh();
       }
@@ -27,19 +27,19 @@ $.extend(Collection.prototype, {
     return this;
   },
 
-  remove: function() {
+  remove: function () {
     Tooltips.removeTooltips(this.tooltips);
 
     // clear tooltips on this collection
     this.tooltips = [];
 
     return this;
-  }
+  },
 });
 
-$.each("show hide toggle disable enable".split(" "), function(i, name) {
-  Collection.prototype[name] = function() {
-    $.each(this.tooltips, function(j, tooltip) {
+$.each("show hide toggle disable enable".split(" "), function (_i, name) {
+  Collection.prototype[name] = function () {
+    $.each(this.tooltips, function (_j, tooltip) {
       tooltip.is("api", true);
       tooltip[name]();
     });

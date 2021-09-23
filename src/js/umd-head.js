@@ -2,7 +2,7 @@
  * Tipped - <%= pkg.description %> - v<%= pkg.version %>
  * (c) 2012-<%= grunt.template.today("yyyy") %> Nick Stakenburg
  *
- * http://www.tippedjs.com
+ * https://github/com/staaky/tipped
  *
  * @license: https://creativecommons.org/licenses/by/4.0
  */

@@ -1,5 +1,5 @@
 $.extend(Tooltip.prototype, {
-  setActive: function() {
+  setActive: function () {
     this.is("active", true);
 
     //  raise the tooltip if it's visible
@@ -11,21 +11,21 @@ $.extend(Tooltip.prototype, {
       this.clearTimer("idle");
     }
   },
-  setIdle: function() {
+  setIdle: function () {
     this.is("active", false);
 
     if (this.options.hideAfter) {
       this.setTimer(
         "idle",
-        $.proxy(function() {
+        function () {
           this.clearTimer("idle");
 
           if (!this.is("active")) {
             this.hide();
           }
-        }, this),
+        }.bind(this),
         this.options.hideAfter
       );
     }
-  }
+  },
 });

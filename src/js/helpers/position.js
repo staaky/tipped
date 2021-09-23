@@ -11,52 +11,53 @@ var Position = {
     "bottomleft",
     "leftbottom",
     "leftmiddle",
-    "lefttop"
+    "lefttop",
   ],
 
   regex: {
-    toOrientation: /^(top|left|bottom|right)(top|left|bottom|right|middle|center)$/,
+    toOrientation:
+      /^(top|left|bottom|right)(top|left|bottom|right|middle|center)$/,
     horizontal: /^(top|bottom)/,
     isCenter: /(middle|center)/,
-    side: /^(top|bottom|left|right)/
+    side: /^(top|bottom|left|right)/,
   },
 
-  toDimension: (function() {
+  toDimension: (function () {
     var translate = {
       top: "height",
       left: "width",
       bottom: "height",
-      right: "width"
+      right: "width",
     };
 
-    return function(position) {
+    return function (position) {
       return translate[position];
     };
   })(),
 
-  isCenter: function(position) {
+  isCenter: function (position) {
     return !!position.toLowerCase().match(this.regex.isCenter);
   },
 
-  isCorner: function(position) {
+  isCorner: function (position) {
     return !this.isCenter(position);
   },
 
   //returns 'horizontal' or 'vertical' based on the options object
-  getOrientation: function(position) {
+  getOrientation: function (position) {
     return position.toLowerCase().match(this.regex.horizontal)
       ? "horizontal"
       : "vertical";
   },
 
-  getSide: function(position) {
+  getSide: function (position) {
     var side = null,
       matches = position.toLowerCase().match(this.regex.side);
     if (matches && matches[1]) side = matches[1];
     return side;
   },
 
-  split: function(position) {
+  split: function (position) {
     return position.toLowerCase().match(this.regex.toOrientation);
   },
 
@@ -64,9 +65,9 @@ var Position = {
     top: "bottom",
     bottom: "top",
     left: "right",
-    right: "left"
+    right: "left",
   },
-  flip: function(position, corner) {
+  flip: function (position, corner) {
     var split = this.split(position);
 
     if (corner) {
@@ -78,7 +79,7 @@ var Position = {
     }
   },
 
-  inverseCornerPlane: function(position) {
+  inverseCornerPlane: function (position) {
     if (Position.isCorner(position)) {
       var split = this.split(position);
       return split[2] + split[1];
@@ -87,7 +88,7 @@ var Position = {
     }
   },
 
-  adjustOffsetBasedOnPosition: function(
+  adjustOffsetBasedOnPosition: function (
     offset,
     defaultTargetPosition,
     targetPosition
@@ -100,7 +101,7 @@ var Position = {
       top: { right: "x" },
       bottom: { left: "x" },
       left: { bottom: "y" },
-      right: { top: "y" }
+      right: { top: "y" },
     };
 
     var defaultOrientation = Position.getOrientation(defaultTargetPosition);
@@ -140,7 +141,7 @@ var Position = {
     return adjustedOffset;
   },
 
-  getBoxFromPoints: function(x1, y1, x2, y2) {
+  getBoxFromPoints: function (x1, y1, x2, y2) {
     var minX = Math.min(x1, x2),
       maxX = Math.max(x1, x2),
       minY = Math.min(y1, y2),
@@ -150,11 +151,11 @@ var Position = {
       left: minX,
       top: minY,
       width: Math.max(maxX - minX, 0),
-      height: Math.max(maxY - minY, 0)
+      height: Math.max(maxY - minY, 0),
     };
   },
 
-  isPointWithinBox: function(x1, y1, bx1, by1, bx2, by2) {
+  isPointWithinBox: function (x1, y1, bx1, by1, bx2, by2) {
     var box = this.getBoxFromPoints(bx1, by1, bx2, by2);
 
     return (
@@ -164,7 +165,7 @@ var Position = {
       y1 <= box.top + box.height
     );
   },
-  isPointWithinBoxLayout: function(x, y, layout) {
+  isPointWithinBoxLayout: function (x, y, layout) {
     return this.isPointWithinBox(
       x,
       y,
@@ -175,21 +176,21 @@ var Position = {
     );
   },
 
-  getDistance: function(x1, y1, x2, y2) {
+  getDistance: function (x1, y1, x2, y2) {
     return Math.sqrt(
       Math.pow(Math.abs(x2 - x1), 2) + Math.pow(Math.abs(y2 - y1), 2)
     );
   },
 
-  intersectsLine: (function() {
-    var ccw = function(x1, y1, x2, y2, x3, y3) {
+  intersectsLine: (function () {
+    var ccw = function (x1, y1, x2, y2, x3, y3) {
       var cw = (y3 - y1) * (x2 - x1) - (y2 - y1) * (x3 - x1);
       return cw > 0 ? true : cw < 0 ? false : true;
     };
 
-    return function(x1, y1, x2, y2, x3, y3, x4, y4, isReturnPosition) {
+    return function (x1, y1, x2, y2, x3, y3, x4, y4, isReturnPosition) {
       if (!isReturnPosition) {
-        /* http://www.bryceboe.com/2006/10/23/line-segment-intersection-algorithm/comment-page-1/ */
+        /* http://www.bryceboe.com/2006/10/23/line-segment-intersection-algorithm */
         return (
           ccw(x1, y1, x3, y3, x4, y4) != ccw(x2, y2, x3, y3, x4, y4) &&
           ccw(x1, y1, x2, y2, x3, y3) != ccw(x1, y1, x2, y2, x4, y4)
@@ -216,5 +217,5 @@ var Position = {
 
       return false; // No collision
     };
-  })()
+  })(),
 };

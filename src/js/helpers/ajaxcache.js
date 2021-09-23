@@ -1,9 +1,9 @@
-var AjaxCache = (function() {
+var AjaxCache = (function () {
   var cache = [];
 
   return {
     // return an update object to pass onto tooltip.update()
-    get: function(ajax) {
+    get: function (ajax) {
       var entry = null;
       for (var i = 0; i < cache.length; i++) {
         if (
@@ -19,7 +19,7 @@ var AjaxCache = (function() {
       return entry;
     },
 
-    set: function(ajax, callbackName, args) {
+    set: function (ajax, callbackName, args) {
       var entry = this.get(ajax);
       if (!entry) {
         entry = $.extend({ callbacks: {} }, ajax);
@@ -29,7 +29,7 @@ var AjaxCache = (function() {
       entry.callbacks[callbackName] = args;
     },
 
-    remove: function(url) {
+    remove: function (url) {
       for (var i = 0; i < cache.length; i++) {
         if (cache[i] && cache[i].url === url) {
           delete cache[i];
@@ -37,8 +37,8 @@ var AjaxCache = (function() {
       }
     },
 
-    clear: function() {
+    clear: function () {
       cache = [];
-    }
+    },
   };
 })();

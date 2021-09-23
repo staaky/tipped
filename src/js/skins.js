@@ -7,7 +7,7 @@ Tipped.Skins = {
     container: false,
     containment: {
       selector: "viewport",
-      padding: 5
+      padding: 5,
     },
     close: false,
     detach: true,
@@ -31,7 +31,7 @@ Tipped.Skins = {
     spinner: true,
     stem: true,
     target: "element",
-    voila: true
+    voila: true,
   },
 
   // Every other skin inherits from this one
@@ -39,18 +39,18 @@ Tipped.Skins = {
     ajax: false,
     hideOn: {
       element: "mouseleave",
-      tooltip: "mouseleave"
+      tooltip: "mouseleave",
     },
     showOn: {
       element: "mouseenter",
-      tooltip: "mouseenter"
-    }
-  }
+      tooltip: "mouseenter",
+    },
+  },
 };
 
 $.each(
   "dark light gray red green blue lightyellow lightblue lightpink".split(" "),
-  function(i, s) {
+  function (i, s) {
     Tipped.Skins[s] = {};
   }
 );

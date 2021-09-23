@@ -1,6 +1,6 @@
 $.extend(Tooltip.prototype, {
   // make sure there are no animations queued up, and stop any animations currently going on
-  stop: function() {
+  stop: function () {
     // cancel when we call this function before the tooltip is created
     if (!this._tooltip) return;
 
@@ -11,7 +11,7 @@ $.extend(Tooltip.prototype, {
     this._tooltip.stop(1, 0);
   },
 
-  showDelayed: function(event) {
+  showDelayed: function (event) {
     if (this.is("disabled")) return;
 
     // cancel hide timer
@@ -23,15 +23,15 @@ $.extend(Tooltip.prototype, {
     // otherwise we start one
     this.setTimer(
       "show",
-      $.proxy(function() {
+      function () {
         this.clearTimer("show");
         this.show();
-      }, this),
+      }.bind(this),
       this.options.showDelay || 1
     );
   },
 
-  show: function() {
+  show: function () {
     this.clearTimer("hide");
 
     // don't show tooltip already visible or on hidden targets, those would end up at (0, 0)
@@ -53,11 +53,11 @@ $.extend(Tooltip.prototype, {
     // update
     if (!(this.is("updated") || this.is("updating"))) {
       shq.queue(
-        $.proxy(function(next_updated) {
+        function (next_updated) {
           this._onResizeDimensions = { width: 0, height: 0 };
 
           this.update(
-            $.proxy(function(aborted) {
+            function (aborted) {
               if (aborted) {
                 this.is("visible", false);
                 this.detach();
@@ -65,9 +65,9 @@ $.extend(Tooltip.prototype, {
               }
 
               next_updated();
-            }, this)
+            }.bind(this)
           );
-        }, this)
+        }.bind(this)
       );
     }
 
@@ -76,19 +76,19 @@ $.extend(Tooltip.prototype, {
     // allowing the update to finish without conflicting with the sanitize
     // that might even be performed later or cancelled
     shq.queue(
-      $.proxy(function(next_ready_to_show) {
+      function (next_ready_to_show) {
         if (!this.is("sanitized")) {
           this._contentWrapper.css({ visibility: "hidden" });
 
           this.startLoading();
 
           this.sanitize(
-            $.proxy(function() {
+            function () {
               this.stopLoading();
               this._contentWrapper.css({ visibility: "visible" });
               this.is("resize-to-content", true);
               next_ready_to_show();
-            }, this)
+            }.bind(this)
           );
         } else {
           // already sanitized
@@ -97,24 +97,24 @@ $.extend(Tooltip.prototype, {
           this.is("resize-to-content", true);
           next_ready_to_show();
         }
-      }, this)
+      }.bind(this)
     );
 
     // position and raise
     // we always do this because when the tooltip hides and ajax updates, we'd otherwise have incorrect dimensions
     shq.queue(
-      $.proxy(function(next_position_raise) {
+      function (next_position_raise) {
         this.position();
         this.raise();
         next_position_raise();
-      }, this)
+      }.bind(this)
     );
 
     // onShow callback
     shq.queue(
-      $.proxy(function(next_onshow) {
+      function (next_onshow) {
         // only fire it here if we've already updated
-        if (this.is("updated") && $.type(this.options.onShow) === "function") {
+        if (this.is("updated") && typeof this.options.onShow === "function") {
           //
           var visible = new Visible(this._tooltip);
           this.options.onShow(this._content[0], this.element); // todo: update
@@ -123,24 +123,24 @@ $.extend(Tooltip.prototype, {
         } else {
           next_onshow();
         }
-      }, this)
+      }.bind(this)
     );
 
     // Fade-in
     shq.queue(
-      $.proxy(function(next_show) {
-        this._show(/*instant ? 0 :*/ this.options.fadeIn, function() {
+      function (next_show) {
+        this._show(/*instant ? 0 :*/ this.options.fadeIn, function () {
           next_show();
         });
-      }, this)
+      }.bind(this)
     );
   },
 
-  _show: function(duration, callback) {
+  _show: function (duration, callback) {
     duration =
-      ($.type(duration) === "number" ? duration : this.options.fadeIn) || 0;
+      (typeof duration === "number" ? duration : this.options.fadeIn) || 0;
     callback =
-      callback || ($.type(arguments[0]) == "function" ? arguments[0] : false);
+      callback || (typeof arguments[0] == "function" ? arguments[0] : false);
 
     // hide others
     if (this.options.hideOthers) {
@@ -150,13 +150,13 @@ $.extend(Tooltip.prototype, {
     this._tooltip.fadeTo(
       duration,
       1,
-      $.proxy(function() {
+      function () {
         if (callback) callback();
-      }, this)
+      }.bind(this)
     );
   },
 
-  hideDelayed: function() {
+  hideDelayed: function () {
     // cancel show timer
     this.clearTimer("show");
 
@@ -166,15 +166,15 @@ $.extend(Tooltip.prototype, {
     // otherwise we start one
     this.setTimer(
       "hide",
-      $.proxy(function() {
+      function () {
         this.clearTimer("hide");
         this.hide();
-      }, this),
+      }.bind(this),
       this.options.hideDelay || 1 // always at least some delay
     );
   },
 
-  hide: function(instant, callback) {
+  hide: function (instant, callback) {
     this.clearTimer("show");
     if (!this.visible() || this.is("disabled")) return;
 
@@ -185,39 +185,39 @@ $.extend(Tooltip.prototype, {
 
     // instantly cancel ajax/sanitize/refresh
     shq.queue(
-      $.proxy(function(next_aborted) {
+      function (next_aborted) {
         this.abort();
         next_aborted();
-      }, this)
+      }.bind(this)
     );
 
     // Fade-out
     shq.queue(
-      $.proxy(function(next_fade_out) {
+      function (next_fade_out) {
         this._hide(instant, next_fade_out);
-      }, this)
+      }.bind(this)
     );
 
     // if all tooltips are hidden now we can reset Tooltips.zIndex.current
-    shq.queue(function(next_resetZ) {
+    shq.queue(function (next_resetZ) {
       Tooltips.resetZ();
       next_resetZ();
     });
 
     // update on next open
     shq.queue(
-      $.proxy(function(next_update_on_show) {
+      function (next_update_on_show) {
         this.clearUpdatedTo();
         next_update_on_show();
-      }, this)
+      }.bind(this)
     );
 
-    if ($.type(this.options.afterHide) === "function" && this.is("updated")) {
+    if (typeof this.options.afterHide === "function" && this.is("updated")) {
       shq.queue(
-        $.proxy(function(next_afterhide) {
+        function (next_afterhide) {
           this.options.afterHide(this._content[0], this.element); // TODO: update
           next_afterhide();
-        }, this)
+        }.bind(this)
       );
     }
 
@@ -225,18 +225,18 @@ $.extend(Tooltip.prototype, {
     // after afterHide callback since it checks for this
     if (!this.options.cache && (this.options.ajax || this._fn)) {
       shq.queue(
-        $.proxy(function(next_non_cached_reset) {
+        function (next_non_cached_reset) {
           this.is("updated", false);
           this.is("updating", false);
           this.is("sanitized", false); // sanitize again
           next_non_cached_reset();
-        }, this)
+        }.bind(this)
       );
     }
 
     // callback
-    if ($.type(callback) === "function") {
-      shq.queue(function(next_callback) {
+    if (typeof callback === "function") {
+      shq.queue(function (next_callback) {
         callback();
         next_callback();
       });
@@ -244,16 +244,16 @@ $.extend(Tooltip.prototype, {
 
     // detach last
     shq.queue(
-      $.proxy(function(next_detach) {
+      function (next_detach) {
         this.detach();
         next_detach();
-      }, this)
+      }.bind(this)
     );
   },
 
-  _hide: function(instant, callback) {
+  _hide: function (instant, callback) {
     callback =
-      callback || ($.type(arguments[0]) === "function" ? arguments[0] : false);
+      callback || (typeof arguments[0] === "function" ? arguments[0] : false);
 
     this.attach();
 
@@ -261,7 +261,7 @@ $.extend(Tooltip.prototype, {
     this._tooltip.fadeTo(
       instant ? 0 : this.options.fadeOut,
       0,
-      $.proxy(function() {
+      function () {
         // stop loading after a complete hide to make sure a loading icon
         // fades out without switching to content during a hide()
         this.stopLoading();
@@ -276,16 +276,16 @@ $.extend(Tooltip.prototype, {
         this._tooltip.hide();
 
         if (callback) callback();
-      }, this)
+      }.bind(this)
     );
   },
 
-  toggle: function() {
+  toggle: function () {
     if (this.is("disabled")) return;
     this[this.visible() ? "hide" : "show"]();
   },
 
-  raise: function() {
+  raise: function () {
     // if zIndex is set on the tooltip we don't raise it.
     if (!this.is("build") || this.options.zIndex) return;
     var highestTooltip = Tooltips.getHighestTooltip();
@@ -305,5 +305,5 @@ $.extend(Tooltip.prototype, {
         this._tooltip.css({ "z-index": this.zIndex });
       }
     }
-  }
+  },
 });

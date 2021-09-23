@@ -5,13 +5,13 @@ function Tooltip() {
 $.extend(Tooltip.prototype, {
   supportsLoading: Support.css.transform && Support.css.animation,
 
-  initialize: function(element, content) {
+  initialize: function (element, content) {
     this.element = element;
     if (!this.element) return;
 
     var options;
     if (
-      $.type(content) === "object" &&
+      typeof content === "object" &&
       !(
         _.isElement(content) ||
         _.isText(content) ||
@@ -40,19 +40,19 @@ $.extend(Tooltip.prototype, {
     this._cache = {
       dimensions: {
         width: 0,
-        height: 0
+        height: 0,
       },
       events: [],
       timers: {},
       layouts: {},
       is: {},
       fnCallFn: "",
-      updatedTo: {}
+      updatedTo: {},
     };
 
     // queues for effects
     this.queues = {
-      showhide: $({})
+      showhide: $({}),
     };
 
     // title
@@ -71,7 +71,8 @@ $.extend(Tooltip.prototype, {
 
       if (content) {
         // avoid scripts in title/data-tipped
-        var SCRIPT_REGEX = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
+        var SCRIPT_REGEX =
+          /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
         content = content.replace(SCRIPT_REGEX, "");
       }
     }
@@ -93,7 +94,7 @@ $.extend(Tooltip.prototype, {
 
     this.content = content;
     this.title = $(this.element).data("tipped-title");
-    if ($.type(this.options.title) != "undefined")
+    if (typeof this.options.title !== "undefined")
       this.title = this.options.title;
 
     this.zIndex = this.options.zIndex || +Tooltips.options.startingZIndex;
@@ -117,9 +118,8 @@ $.extend(Tooltip.prototype, {
       parentTooltip;
     if (
       parentTooltipElement &&
-      (parentTooltip = Tooltips.getTooltipByTooltipElement(
-        parentTooltipElement
-      ))
+      (parentTooltip =
+        Tooltips.getTooltipByTooltipElement(parentTooltipElement))
     ) {
       parentTooltip.is("nest", true);
     }
@@ -149,7 +149,7 @@ $.extend(Tooltip.prototype, {
     }
 
     // function as content
-    if ($.type(this.content) === "function") {
+    if (typeof this.content === "function") {
       this._fn = this.content;
     }
 
@@ -158,7 +158,7 @@ $.extend(Tooltip.prototype, {
     Tooltips.add(this);
   },
 
-  remove: function() {
+  remove: function () {
     this.unbind();
 
     this.clearTimers();
@@ -208,27 +208,23 @@ $.extend(Tooltip.prototype, {
     $(this.element).attr("class", newClassList);
   },
 
-  detach: function() {
+  detach: function () {
     if (this.options.detach && !this.is("detached")) {
       if (this._tooltip) this._tooltip.detach();
       this.is("detached", true);
     }
   },
 
-  attach: function() {
+  attach: function () {
     if (this.is("detached")) {
       var container;
-      if ($.type(this.options.container) === "string") {
+      if (typeof this.options.container === "string") {
         var target = this.target;
         if (target === "mouse") {
           target = this.element;
         }
 
-        container = $(
-          $(target)
-            .closest(this.options.container)
-            .first()
-        );
+        container = $($(target).closest(this.options.container).first());
       } else {
         container = $(this.options.container);
       }
@@ -241,14 +237,14 @@ $.extend(Tooltip.prototype, {
     }
   },
 
-  preBuild: function() {
+  preBuild: function () {
     this.is("detached", true);
 
     var initialCSS = {
       left: "-10000px", // TODO: remove
       top: "-10000px",
       opacity: 0,
-      zIndex: this.zIndex
+      zIndex: this.zIndex,
     };
 
     this._tooltip = $("<div>")
@@ -261,7 +257,7 @@ $.extend(Tooltip.prototype, {
     this.createPreBuildObservers();
   },
 
-  build: function() {
+  build: function () {
     if (this.is("build")) return;
 
     this.attach();
@@ -294,9 +290,7 @@ $.extend(Tooltip.prototype, {
                   (this._close = $("<div>")
                     .addClass("tpd-close")
                     .append(
-                      $("<div>")
-                        .addClass("tpd-close-icon")
-                        .html("&times;")
+                      $("<div>").addClass("tpd-close-icon").html("&times;")
                     ))
                 ))
             )
@@ -314,9 +308,7 @@ $.extend(Tooltip.prototype, {
                   (this._inner_close = $("<div>")
                     .addClass("tpd-close")
                     .append(
-                      $("<div>")
-                        .addClass("tpd-close-icon")
-                        .html("&times;")
+                      $("<div>").addClass("tpd-close-icon").html("&times;")
                     ))
                 ))
             ))
@@ -330,7 +322,7 @@ $.extend(Tooltip.prototype, {
       "border-radius": Math.max(
         this.skin._css.radius - this.skin._css.border,
         0
-      )
+      ),
     });
 
     this.createPostBuildObservers();
@@ -338,12 +330,12 @@ $.extend(Tooltip.prototype, {
     this.is("build", true);
   },
 
-  createPostBuildObservers: function() {
+  createPostBuildObservers: function () {
     // x
     this._tooltip.delegate(
       ".tpd-close, .close-tooltip",
       "click",
-      $.proxy(function(event) {
+      function (event) {
         // this helps prevent the click on x to trigger a click on the body
         // which could conflict with some scripts
         event.stopPropagation();
@@ -352,14 +344,14 @@ $.extend(Tooltip.prototype, {
         this.is("api", false);
 
         this.hide(true);
-      }, this)
+      }.bind(this)
     );
   },
 
-  createPreBuildObservers: function() {
+  createPreBuildObservers: function () {
     // what can be observed before build
     // - the element
-    this.bind(this.element, "mouseenter", this.setActive); // mousemove
+    this.bind(this.element, "mouseenter", this.setActive);
     this.bind(
       this._tooltip,
       // avoid double click issues
@@ -368,17 +360,17 @@ $.extend(Tooltip.prototype, {
     );
 
     // idle stats
-    this.bind(this.element, "mouseleave", function(event) {
+    this.bind(this.element, "mouseleave", function (event) {
       this.setIdle(event);
     });
-    this.bind(this._tooltip, "mouseleave", function(event) {
+    this.bind(this._tooltip, "mouseleave", function (event) {
       this.setIdle(event);
     });
 
     if (this.options.showOn) {
       $.each(
         this.options.showOn,
-        $.proxy(function(name, events) {
+        function (name, events) {
           var element,
             toggleable = false;
 
@@ -417,23 +409,23 @@ $.extend(Tooltip.prototype, {
               element,
               useEvents,
               events === "click" && toggleable
-                ? function(event) {
+                ? function () {
                     this.is("api", false);
                     this.toggle();
                   }
-                : function(event) {
+                : function () {
                     this.is("api", false);
                     this.showDelayed();
                   }
             );
           }
-        }, this)
+        }.bind(this)
       );
 
       // iOS requires that we track touchend time to avoid
       // links requiring a double-click
       if (Support.touch && Browser.MobileSafari) {
-        this.bind(this._tooltip, "touchend", function() {
+        this.bind(this._tooltip, "touchend", function () {
           this._tooltipTouchEndTime = new Date().getTime();
         });
       }
@@ -442,7 +434,7 @@ $.extend(Tooltip.prototype, {
     if (this.options.hideOn) {
       $.each(
         this.options.hideOn,
-        $.proxy(function(name, events) {
+        function (name, events) {
           var element;
 
           switch (name) {
@@ -476,7 +468,7 @@ $.extend(Tooltip.prototype, {
               /^(target|element)/.test(name) &&
               /mouse(leave|out)/.test(useEvents)
             ) {
-              this.bind(element, useEvents, function(event) {
+              this.bind(element, useEvents, function (event) {
                 if (
                   this._tooltipTouchEndTime &&
                   /^mouse(leave|out)$/.test(event.type)
@@ -491,13 +483,13 @@ $.extend(Tooltip.prototype, {
                 this.hideDelayed();
               });
             } else {
-              this.bind(element, useEvents, function(event) {
+              this.bind(element, useEvents, function () {
                 this.is("api", false);
                 this.hideDelayed();
               });
             }
           }
-        }, this)
+        }.bind(this)
       );
     }
 
@@ -510,7 +502,7 @@ $.extend(Tooltip.prototype, {
       this.bind(
         document.documentElement,
         "click touchend",
-        $.proxy(function(event) {
+        function (event) {
           if (!this.visible()) return;
 
           var element = $(event.target).closest(
@@ -520,11 +512,12 @@ $.extend(Tooltip.prototype, {
           if (
             !element ||
             (element &&
-              (element !== this._tooltip[0] && element !== this.element))
+              element !== this._tooltip[0] &&
+              element !== this.element)
           ) {
             this.hide();
           }
-        }, this)
+        }.bind(this)
       );
     }
 
@@ -532,9 +525,9 @@ $.extend(Tooltip.prototype, {
       this.bind(
         this.element,
         "mouseenter mousemove",
-        $.proxy(function(event) {
+        function (event) {
           this._cache.event = event;
-        }, this)
+        }.bind(this)
       );
     }
 
@@ -548,11 +541,11 @@ $.extend(Tooltip.prototype, {
     }
 
     if (isMouseMove) {
-      this.bind(this.element, "mousemove", function(event) {
+      this.bind(this.element, "mousemove", function () {
         if (!this.is("build")) return;
         this.is("api", false);
         this.position();
       });
     }
-  }
+  },
 });

@@ -1,5 +1,5 @@
 var Tipped = {};
 
 $.extend(Tipped, {
-  version: '<%= pkg.version %>'
+  version: "<%= pkg.version %>",
 });

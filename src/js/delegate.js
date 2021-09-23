@@ -1,20 +1,20 @@
 $.extend(Tipped, {
-  delegate: function() {
+  delegate: function () {
     Delegations.add.apply(Delegations, _slice.call(arguments));
   },
 
-  undelegate: function() {
+  undelegate: function () {
     Delegations.remove.apply(Delegations, _slice.call(arguments));
-  }
+  },
 });
 
 var Delegations = {
   _uid: 0,
   _delegations: {},
 
-  add: function(selector, content, options) {
+  add: function (selector, content, options) {
     var options;
-    if ($.type(content) === "object" && !_.isElement(content)) {
+    if (typeof content === "object" && !_.isElement(content)) {
       options = content;
       content = null;
     } else {
@@ -29,10 +29,10 @@ var Delegations = {
       uid: uid,
       selector: selector,
       content: content,
-      options: ttOptions
+      options: ttOptions,
     };
 
-    var handler = function(event) {
+    var handler = function (event) {
       // store the uid so we don't create a second tooltip
       $(this).addClass("tpd-delegation-uid-" + uid);
 
@@ -47,17 +47,17 @@ var Delegations = {
       tooltip.showDelayed();
     };
 
-    this._delegations[uid].removeTitleHandler = $.proxy(this.removeTitle, this);
-    $(document).delegate(
-      selector + ":not(.tpd-delegation-uid-" + uid + ")",
+    this._delegations[uid].removeTitleHandler = this.removeTitle.bind(this);
+    $(document).on(
       "mouseenter",
+      selector + ":not(.tpd-delegation-uid-" + uid + ")",
       this._delegations[uid].removeTitleHandler
     );
 
     this._delegations[uid].handler = handler;
-    $(document).delegate(
-      selector + ":not(.tpd-delegation-uid-" + uid + ")",
+    $(document).on(
       ttOptions.showOn.element,
+      selector + ":not(.tpd-delegation-uid-" + uid + ")",
       handler
     );
   },
@@ -65,7 +65,7 @@ var Delegations = {
   // puts the title into data-tipped-restore-title,
   // this way tooltip creation picks up on it
   // without showing the native title tooltip
-  removeTitle: function(event) {
+  removeTitle: function (event) {
     var element = event.currentTarget;
 
     var title = $(element).attr("title");
@@ -77,45 +77,45 @@ var Delegations = {
     }
   },
 
-  remove: function(selector) {
+  remove: function (selector) {
     $.each(
       this._delegations,
-      $.proxy(function(uid, delegation) {
+      function (uid, delegation) {
         if (delegation.selector === selector) {
           $(document)
-            .undelegate(
-              selector + ":not(.tpd-delegation-uid-" + uid + ")",
+            .off(
               "mouseenter",
+              selector + ":not(.tpd-delegation-uid-" + uid + ")",
               delegation.removeTitleHandler
             )
-            .undelegate(
-              selector + ":not(.tpd-delegation-uid-" + uid + ")",
+            .off(
               delegation.options.showOn.element,
+              selector + ":not(.tpd-delegation-uid-" + uid + ")",
               delegation.handler
             );
           delete this._delegations[uid];
         }
-      }, this)
+      }.bind(this)
     );
   },
 
-  removeAll: function() {
+  removeAll: function () {
     $.each(
       this._delegations,
-      $.proxy(function(uid, delegation) {
+      function (uid, delegation) {
         $(document)
-          .undelegate(
-            delegation.selector + ":not(.tpd-delegation-uid-" + uid + ")",
+          .off(
             "mouseenter",
+            delegation.selector + ":not(.tpd-delegation-uid-" + uid + ")",
             delegation.removeTitleHandler
           )
-          .undelegate(
-            delegation.selector + ":not(.tpd-delegation-uid-" + uid + ")",
+          .off(
             delegation.options.showOn.element,
+            delegation.selector + ":not(.tpd-delegation-uid-" + uid + ")",
             delegation.handler
           );
         delete this._delegations[uid];
-      }, this)
+      }.bind(this)
     );
-  }
+  },
 };

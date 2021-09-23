@@ -1,15 +1,15 @@
 var Options = {
-  create: (function() {
+  create: (function () {
     var BASE, RESET;
 
     // hideOn helper
     function toDisplayObject(input, display) {
       var on;
-      if ($.type(input) === "string") {
+      if (typeof input === "string") {
         on = {
           element:
             (RESET[display] && RESET[display].element) || BASE[display].element,
-          event: input
+          event: input,
         };
       } else {
         on = deepExtend($.extend({}, BASE[display]), input);
@@ -72,7 +72,7 @@ var Options = {
         var RESET_ajax = RESET.ajax || {},
           BASE_ajax = BASE.ajax;
 
-        if ($.type(MERGED.ajax) === "boolean") {
+        if (typeof MERGED.ajax === "boolean") {
           // true
           MERGED.ajax = {
             //method: RESET_ajax.type || BASE_ajax.type
@@ -85,9 +85,9 @@ var Options = {
       var position;
       var targetPosition = (targetPosition =
         (MERGED.position && MERGED.position.target) ||
-        ($.type(MERGED.position) === "string" && MERGED.position) ||
+        (typeof MERGED.position === "string" && MERGED.position) ||
         (RESET.position && RESET.position.target) ||
-        ($.type(RESET.position) === "string" && RESET.position) ||
+        (typeof RESET.position === "string" && RESET.position) ||
         (BASE.position && BASE.position.target) ||
         BASE.position);
       targetPosition = middleize(targetPosition);
@@ -100,13 +100,13 @@ var Options = {
       tooltipPosition = middleize(tooltipPosition);
 
       if (MERGED.position) {
-        if ($.type(MERGED.position) === "string") {
+        if (typeof MERGED.position === "string") {
           MERGED.position = middleize(MERGED.position);
           position = {
             target: MERGED.position,
             tooltip: Tooltips.Position.getTooltipPositionFromTarget(
               MERGED.position
-            )
+            ),
           };
         } else {
           // object
@@ -121,7 +121,7 @@ var Options = {
       } else {
         position = {
           tooltip: tooltipPosition,
-          target: targetPosition
+          target: targetPosition,
         };
       }
 
@@ -184,7 +184,7 @@ var Options = {
       } else {
         offset = {
           x: MERGED.offset.x,
-          y: MERGED.offset.y
+          y: MERGED.offset.y,
         };
       }
 
@@ -202,7 +202,7 @@ var Options = {
         // otherwise we'd always have the BASE/RESET object for it as starting point
         var showOn = MERGED.showOn;
 
-        if ($.type(showOn) === "string") {
+        if (typeof showOn === "string") {
           showOn = { element: showOn };
         }
 
@@ -212,7 +212,7 @@ var Options = {
       if (MERGED.hideOn) {
         var hideOn = MERGED.hideOn;
 
-        if ($.type(hideOn) === "string") {
+        if (typeof hideOn === "string") {
           hideOn = { element: hideOn };
         }
 
@@ -221,7 +221,7 @@ var Options = {
 
       // normalize inline
       if (MERGED.inline) {
-        if ($.type(MERGED.inline) !== "string") {
+        if (typeof MERGED.inline !== "string") {
           MERGED.inline = false;
         }
       }
@@ -235,7 +235,7 @@ var Options = {
         if (!Spin.supported) {
           MERGED.spinner = false;
         } else {
-          if ($.type(MERGED.spinner) === "boolean") {
+          if (typeof MERGED.spinner === "boolean") {
             MERGED.spinner = RESET.spinner || BASE.spinner || {};
           }
         }
@@ -246,12 +246,12 @@ var Options = {
       }
 
       if (MERGED.containment) {
-        if ($.type(MERGED.containment) === "string") {
+        if (typeof MERGED.containment === "string") {
           MERGED.containment = {
             selector: MERGED.containment,
             padding:
               (RESET.containment && RESET.containment.padding) ||
-              (BASE.padding && BASE.containment.padding)
+              (BASE.padding && BASE.containment.padding),
           };
         }
       }
@@ -265,5 +265,5 @@ var Options = {
     }
 
     return initialize;
-  })()
+  })(),
 };

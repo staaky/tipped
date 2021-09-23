@@ -1,45 +1,45 @@
 var _slice = Array.prototype.slice;
 
 var _ = {
-  wrap: function(fn, wrapper) {
+  wrap: function (fn, wrapper) {
     var __fn = fn;
-    return function() {
-      var args = [$.proxy(__fn, this)].concat(_slice.call(arguments));
+    return function () {
+      var args = [__fn.bind(this)].concat(_slice.call(arguments));
       return wrapper.apply(this, args);
     };
   },
 
   // is
-  isElement: function(object) {
+  isElement: function (object) {
     return object && object.nodeType === 1;
   },
 
-  isText: function(object) {
+  isText: function (object) {
     return object && object.nodeType === 3;
   },
 
-  isDocumentFragment: function(object) {
+  isDocumentFragment: function (object) {
     return object && object.nodeType === 11;
   },
 
-  delay: function(fn, ms) {
+  delay: function (fn, ms) {
     var args = _slice.call(arguments, 2);
-    return setTimeout(function() {
+    return setTimeout(function () {
       return fn.apply(fn, args);
     }, ms);
   },
 
-  defer: function(fn) {
+  defer: function (fn) {
     return _.delay.apply(this, [fn, 1].concat(_slice.call(arguments, 1)));
   },
 
   // Event
-  pointer: function(event) {
+  pointer: function (event) {
     return { x: event.pageX, y: event.pageY };
   },
 
   element: {
-    isAttached: (function() {
+    isAttached: (function () {
       function findTopAncestor(element) {
         // Walk up the DOM tree until we are at the top
         var ancestor = element;
@@ -49,12 +49,12 @@ var _ = {
         return ancestor;
       }
 
-      return function(element) {
+      return function (element) {
         var topAncestor = findTopAncestor(element);
         return !!(topAncestor && topAncestor.body);
       };
-    })()
-  }
+    })(),
+  },
 };
 
 function degrees(radian) {
@@ -90,11 +90,11 @@ function deepExtend(destination, source) {
   return destination;
 }
 
-var getUID = (function() {
+var getUID = (function () {
   var count = 0,
     _prefix = "_tipped-uid-";
 
-  return function(prefix) {
+  return function (prefix) {
     prefix = prefix || _prefix;
 
     count++;

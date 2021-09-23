@@ -2,15 +2,15 @@ var Dimensions = {
   _count: 0,
 
   // dimensions are returned as the 1st parameter of the callback
-  get: function(url, options, callback) {
-    if ($.type(options) == "function") {
+  get: function (url, options, callback) {
+    if (typeof options === "function") {
       callback = options;
       options = {};
     }
     options = $.extend(
       {
         type: "image",
-        lifetime: 1000 * 60 * 5
+        lifetime: 1000 * 60 * 5,
       },
       options || {}
     );
@@ -25,13 +25,13 @@ var Dimensions = {
       switch (type) {
         case "image":
           img = new Image();
-          img.onload = function() {
-            img.onload = function() {};
+          img.onload = function () {
+            img.onload = function () {};
             cache = {
               dimensions: {
                 width: img.width,
-                height: img.height
-              }
+                height: img.height,
+              },
             };
 
             data.image = img;
@@ -54,18 +54,18 @@ var Dimensions = {
     }
 
     return img;
-  }
+  },
 };
 
-Dimensions.Cache = function() {
+Dimensions.Cache = function () {
   return this.initialize.apply(this, _slice.call(arguments));
 };
 $.extend(Dimensions.Cache.prototype, {
-  initialize: function() {
+  initialize: function () {
     this.cache = [];
   },
 
-  get: function(url) {
+  get: function (url) {
     var entry = null;
     for (var i = 0; i < this.cache.length; i++) {
       if (this.cache[i] && this.cache[i].url === url) entry = this.cache[i];
@@ -73,12 +73,12 @@ $.extend(Dimensions.Cache.prototype, {
     return entry;
   },
 
-  set: function(url, dimensions, data) {
+  set: function (url, dimensions, data) {
     this.remove(url);
     this.cache.push({ url: url, dimensions: dimensions, data: data });
   },
 
-  remove: function(url) {
+  remove: function (url) {
     for (var i = 0; i < this.cache.length; i++) {
       if (this.cache[i] && this.cache[i].url === url) {
         delete this.cache[i];
@@ -87,7 +87,7 @@ $.extend(Dimensions.Cache.prototype, {
   },
 
   // forcefully inject a cache entry or extend the data of existing cache
-  inject: function(data) {
+  inject: function (data) {
     var entry = get(data.url);
 
     if (entry) {
@@ -95,26 +95,26 @@ $.extend(Dimensions.Cache.prototype, {
     } else {
       this.cache.push(data);
     }
-  }
+  },
 });
 
 Dimensions.cache = new Dimensions.Cache();
 
 //Loading
-Dimensions.Loading = function() {
+Dimensions.Loading = function () {
   return this.initialize.apply(this, _slice.call(arguments));
 };
 $.extend(Dimensions.Loading.prototype, {
-  initialize: function() {
+  initialize: function () {
     this.cache = [];
   },
 
-  set: function(url, data) {
+  set: function (url, data) {
     this.clear(url);
     this.cache.push({ url: url, data: data });
   },
 
-  get: function(url) {
+  get: function (url) {
     var entry = null;
     for (var i = 0; i < this.cache.length; i++) {
       if (this.cache[i] && this.cache[i].url === url) entry = this.cache[i];
@@ -122,7 +122,7 @@ $.extend(Dimensions.Loading.prototype, {
     return entry;
   },
 
-  clear: function(url) {
+  clear: function (url) {
     var cache = this.cache;
 
     for (var i = 0; i < cache.length; i++) {
@@ -131,14 +131,14 @@ $.extend(Dimensions.Loading.prototype, {
         switch (data.type) {
           case "image":
             if (data.image && data.image.onload) {
-              data.image.onload = function() {};
+              data.image.onload = function () {};
             }
             break;
         }
         delete cache[i];
       }
     }
-  }
+  },
 });
 
 Dimensions.loading = new Dimensions.Loading();

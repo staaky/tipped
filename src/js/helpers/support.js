@@ -1,4 +1,4 @@
-var Support = (function() {
+var Support = (function () {
   var testElement = document.createElement("div"),
     domPrefixes = "Webkit Moz O ms Khtml".split(" ");
 
@@ -32,21 +32,21 @@ var Support = (function() {
     css: {
       animation: testAllProperties("animation"),
       transform: testAllProperties("transform"),
-      prefixed: prefixed
+      prefixed: prefixed,
     },
 
     shadow:
       testAllProperties("boxShadow") && testAllProperties("pointerEvents"),
 
-    touch: (function() {
+    touch: (function () {
       try {
         return !!(
           "ontouchstart" in window ||
           (window.DocumentTouch && document instanceof DocumentTouch)
-        ); // firefox for Android;
+        ); // firefox for Android
       } catch (e) {
         return false;
       }
-    })()
+    })(),
   };
 })();

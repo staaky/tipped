@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tipped</title>
+
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+    ></script>
+
+    <script type="text/javascript" src="../dist/js/tipped.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../dist/css/tipped.css" />
+
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+
+    <script>
+      $(function () {
+        Tipped.create("#demo-size-small", "Small", { size: "small" });
+        Tipped.create("#demo-size-medium", "Medium", { size: "medium" });
+        Tipped.create("#demo-size-large", "Large", { size: "large" });
+
+        Tipped.create("#demo-size-x-small", "extra small", {
+          size: "x-small",
+          skin: "light",
+        });
+        Tipped.create("#demo-size-medium-close", "Medium", {
+          size: "medium",
+          close: true,
+          skin: "light",
+        });
+        Tipped.create("#demo-size-large-title", "With a title bar", {
+          title: "Large",
+          size: "large",
+          skin: "light",
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="page">
+      <div class="demonstrations">
+        <div class="box" id="demo-size-small">small</div>
+        <div class="box" id="demo-size-medium">medium</div>
+        <div class="box" id="demo-size-large">large</div>
+
+        <div class="box" id="demo-size-x-small">x-small</div>
+        <div class="box" id="demo-size-medium-close">medium ×</div>
+        <div class="box" id="demo-size-large-title">large</div>
+      </div>
+    </div>
+  </body>
+</html>

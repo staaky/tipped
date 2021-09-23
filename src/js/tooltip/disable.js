@@ -1,11 +1,11 @@
 $.extend(Tooltip.prototype, {
-  disable: function() {
+  disable: function () {
     if (this.is("disabled")) return;
     this.is("disabled", true);
   },
 
-  enable: function() {
+  enable: function () {
     if (!this.is("disabled")) return;
     this.is("disabled", false);
-  }
+  },
 });

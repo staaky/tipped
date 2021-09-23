@@ -1,4 +1,4 @@
-var Color = (function() {
+var Color = (function () {
   var names = {
     _default: "#000000",
     aqua: "#00ffff",
@@ -16,7 +16,7 @@ var Color = (function() {
     silver: "#c0c0c0",
     teal: "#008080",
     white: "#ffffff",
-    yellow: "#ffff00"
+    yellow: "#ffff00",
   };
 
   function hex(x) {
@@ -29,7 +29,7 @@ var Color = (function() {
   }
 
   return {
-    toRGB: function(str) {
+    toRGB: function (str) {
       if (/^rgba?\(/.test(str)) {
         return rgb2hex(str);
       } else {
@@ -52,6 +52,6 @@ var Color = (function() {
 
         return "#" + hex;
       }
-    }
+    },
   };
 })();
