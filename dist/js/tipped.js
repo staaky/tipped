@@ -1,8 +1,8 @@
 /*!
- * Tipped - A complete Tooltip solution based on jQuery - v4.8.0
+ * Tipped - A complete Tooltip solution based on jQuery - v4.8.1
  * (c) 2012-2021 Nick Stakenburg
  *
- * https://github/com/staaky/tipped
+ * https://github.com/staaky/tipped
  *
  * @license: https://creativecommons.org/licenses/by/4.0
  */
@@ -24,7 +24,7 @@
 var Tipped = {};
 
 $.extend(Tipped, {
-  version: "4.8.0",
+  version: "4.8.1",
 });
 
 Tipped.Skins = {
